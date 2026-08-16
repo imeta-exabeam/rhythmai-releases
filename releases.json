@@ -1,0 +1,474 @@
+{
+  "releases": [
+    {
+      "version": "1.2.27",
+      "date": "2026-08-16",
+      "appOnly": true,
+      "servicesChanged": ["app"],
+      "summary": [
+        "Smarter update script — only touches what changed",
+        "Update script now ships inside the app image",
+        "No action required"
+      ],
+      "highlights": [
+        "One update script for every customer, span-aware. The customer update scripts (Update-RhythmAI.ps1 / update-rhythmai.sh) now read the release metadata shipped in the new image, work out which services actually changed between YOUR running version and the target — across however many releases you are jumping — and pull/recreate only those. Upgrading across an app-only stretch touches the app container alone; a stretch that includes, say, the 1.2.24 log-proxy addition touches exactly the app and that sidecar; databases and the AI engine are left running unless a release genuinely changed them. Whenever the metadata cannot vouch for the whole span (very old versions, custom compose files missing a service), the script falls back to the full-stack behavior it always had — it fails open, never wrong. It also tells you which services it chose and why.",
+        "The update script distributes itself. Both scripts now ship inside the app image at /app/deploy/, so any deployment can always extract the current one (docker run --rm --entrypoint cat rhythmai/rhythmai:latest /app/deploy/update-rhythmai.sh > update-rhythmai.sh — same for the .ps1). A script you already have checks its own version against the copy in the new image and prominently tells you when a newer one is available. No more wondering whether your updater is current.",
+        "No database migration and no compose change from 1.2.26. This release is app-image-only — if you are already on 1.2.26 with the updater sidecar, it is the first release you can apply with the Upgrade now button in Settings → About. The Ollama pin (0.20.6), RhythmAI:9b model, prompts and context budgets are unchanged."
+      ]
+    },
+    {
+      "version": "1.2.26",
+      "date": "2026-08-16",
+      "appOnly": false,
+      "servicesChanged": ["app", "updater"],
+      "summary": [
+        "Upgrade RhythmAI straight from Settings",
+        "Threat Universe captures far more log detail",
+        "Process lineage: see what spawned what",
+        "Scannable release notes with full-detail view",
+        "Compose file update required — use the update script"
+      ],
+      "highlights": [
+        "One-click upgrades from the browser. When a new app-only release is available, Settings → About now shows an 'Upgrade now' button next to the release notes: confirm, watch the download and restart progress live, and the page reloads on the new version — no SSH, no docker commands. The work is done by a new single-purpose 'updater' sidecar container that holds the Docker socket so the app itself never has to: it accepts exactly one kind of request (swap the app container's image, pinned to the rhythmai/rhythmai repository, forward-only, token-authenticated over an isolated internal network with no published ports), recreates the app with its exact volumes, networks and environment, health-checks the new version for up to 3 minutes, and if it fails to come up healthy AUTOMATICALLY RESTORES the previous version — keeping the failed container for support diagnosis. After any upgrade a 'Roll back' control can return to the previously recorded version the same way. Releases that change the deployment itself (like this one) are never offered one-click: the button only appears when every release between your version and the latest is marked app-only, so a UI upgrade can never half-apply a release. Deployments without the sidecar keep the familiar copy-the-command flow, now corrected to include the '-p rhythmai' project name (running the documented command without it created a second, parallel stack instead of updating the existing one). The upgrade endpoints require the Settings permission and every trigger is recorded in the audit trail.",
+        "Threat Universe sees the whole log. Data Indexer pulls previously kept 24 fields per log; they now keep 82 of the 105 LogRhythm provides — process lineage (parent process: 'powershell.exe (parent: winword.exe)' now appears in evidence rows and the AI's analysis where before the parent was invisible), session and logon type, action outcomes (status/result/reason), geographic and zone context, MAC addresses, entity topology, transfer volumes, user agents and more. The raw log BODY is still never stored. Alongside the widening, three data-quality fixes: host activity now reads the fields LogRhythm actually populates (some environments send hostnames in fields the graph previously ignored, so machines that appeared in logs never appeared as computers — they do now, with honest per-log counting), Active Directory object names (cn=...) no longer masquerade as computers, and an IP that arrives in a hostname field is shown once as an IP instead of twice as an IP plus a phantom computer. NOTE: pulls cached before this release gain the new fields when refreshed (the ⟳ button) or when their 60-minute cache expires.",
+        "Clearer canvas labels under spotlight. Spotlighting an artifact from the Top Alarms rail now names every alarm in the lit cluster (when 30 or fewer are lit), and zooming in close names alarms regardless — the busy-canvas protection that keeps hundreds of labels from smearing stays in force everywhere else.",
+        "Release notes built for scanning. The Update Available card now shows a few short bullets per release — what changed and whether any action is needed — with a 'Full release notes' toggle per release for the complete details you are reading now.",
+        "No database migration — but the compose file changes this release: it adds the updater sidecar service, its isolated internal network, its state volume, and an UPDATER_TOKEN secret in .env (the update scripts generate the token automatically if missing). Use the customer update script (Update-RhythmAI.ps1 / update-rhythmai.sh) — it shows you the compose diff and asks before replacing; the image also ships the reference compose at /app/deploy/docker-compose.yml. A deployment that declines the sidecar loses nothing it has today: the About page simply keeps the manual update command. The Ollama pin (0.20.6), RhythmAI:9b model, prompts and context budgets are unchanged."
+      ]
+    },
+    {
+      "version": "1.2.25",
+      "date": "2026-08-16",
+      "appOnly": true,
+      "servicesChanged": ["app"],
+      "summary": [
+        "Richer evidence behind Analyze with AI",
+        "Background AI work now runs once daily",
+        "New Neo4j graph stats in Settings",
+        "No action required"
+      ],
+      "highlights": [
+        "Graph Assistant — the AI now sees what the analyst sees. The Analyze-with-AI context was rebuilt as a budgeted, unit-tested evidence pipeline: up to 40 deep raw-log rows per artifact (from the 200 already cached per pull, fairly divided as pulls grow — total prompt cost stays constant no matter how many artifacts you assemble), the previously invisible evidence families (ports, URLs, file hashes, commands/actions, log sources), per-artifact honesty stamps (exact vs sampled counts, cache age — 'pulled 6d ago' — and a note that row times are event times), alarm links carrying risk and MITRE technique, and — when Analyze is clicked from a triage brief — the brief's own findings (scope, timeline, blast radius, hostile reputation) attached as narrative material. The kill-chain stage menu now reads only marker-fenced pulled evidence, so brief text can never unlock empty stages. Verified by a 60-run before/after evaluation on live data: the enriched build eliminated the baseline's watchdog trips and think-fallbacks entirely, every sampled claim traced verbatim to the evidence, latency within 1.22x, and answers now name real objects (documents, status fields) while stating honest negatives ('no direct lateral movement observed') instead of asserting unsourced movement.",
+        "Smarter suggested questions. Follow-up chips are minted only when their backing data actually exists in your pulls — firewall-heavy environments get port and flow chips, EDR-heavy get hashes and commands, proxy-heavy get URLs and domains — and a reputation chip appears when a triage brief with hostile AbuseIPDB findings rode the analysis. Time, reputation, adjacency and alarm-severity questions automatically use the full evidence context while keeping the short answer format. Chip answers are 3x faster, and the stray consulting-style closers and table dumps are gone.",
+        "Background Work — a new Settings section that keeps the GPU for analysts. Automatic incident creation (AI SOC) is now OFF by default: previously, background workers grouped alarms into incidents and generated an AI title for every cluster around the clock, regardless of the per-rule auto-investigate toggles — the LLM burn ran even with everything switched off. Incidents can always be created manually or via API, and the AI SOC page explains the state. API NOTE: with the switch off, POST /api/incidents/auto-generate returns 200 with disabled:true and creates nothing. Rhythm Insights background analytics (SIEM syncs, rule classification, quality assessment, coverage recalculation, summaries) now run as ONE daily batch at a configurable server-UTC time (default midnight) instead of 5-minute/hourly/daily timers — AI steps stand down while an analyst chat, MITRE classify, or manual recalculation is in flight, a failed step waits for tomorrow instead of retrying every 5 minutes (this fixes a latent defect where one failing step could re-run the heavy AI block continuously), and a missed window waits for the next slot rather than storming the GPU at boot. Every Run-Now button still works for on-demand freshness. The card shows server time, last run and next run.",
+        "Assistant readability and branding. Dark mode now mirrors light mode's hierarchy: emphasized topic terms use the blue accent (they previously rendered red, which mis-signals threat), suggested-question chips are bright text on a properly visible pill, and risk levels keep their meaningful colors. The assistant also now carries exactly one logo — the theme-aware RhythmAI wordmark — replacing a stale LogRhythm icon that had survived in four places, and the duplicate per-message avatar is gone.",
+        "Neo4j graph visibility. Settings → Database gains a 'Neo4j graph' tile (total nodes and relationships) and a Graph Contents list — node counts by label and relationship counts by type — so the store that grows with your Threat Universe window is finally observable next to the PostgreSQL tables. Counts come from Neo4j's count store (milliseconds, no scan); if Neo4j is unreachable the section reads 'unavailable' without affecting the page. Store byte-size is intentionally omitted on Community edition, which exposes no honest source for it.",
+        "No database migration and no compose change from 1.2.24. Pull the 1.2.25 app image and recreate the app container; the new configuration keys (aiSoc, insights schedule) merge in automatically with safe defaults on first boot. Cadence notes for operators: new-rule classification and SIEM metadata syncs now refresh in the daily batch (or on demand via Run Now) instead of every 5-60 minutes. The Ollama pin (0.20.6), RhythmAI:9b model, prompts and context budgets are unchanged."
+      ]
+    },
+    {
+      "version": "1.2.24",
+      "date": "2026-08-13",
+      "servicesChanged": ["app", "socket-proxy"],
+      "summary": [
+        "Live container logs in the browser",
+        "One-click support diagnostics bundle",
+        "User management now lives in Settings",
+        "Compose file update required — use the update script"
+      ],
+      "highlights": [
+        "Live Container Logs in the browser. Settings → Health Check gains a 'Container Logs' tab that streams the live logs of every RhythmAI container (app, postgres, neo4j, ollama) straight into the browser — no SSH, no docker commands. Pick a container from the rail (with live up/health state), watch the tail follow in real time, pause and resume, search with in-line highlighting, toggle timestamps, expand to full screen, and download a deeper tail as a file. Lines are colour-coded by the log's own severity (red for ERROR/FATAL, amber for warnings, with a legend) rather than by which stream they arrived on. If a container restarts mid-stream the viewer reconnects on its own and says so. Access is read-only by construction: the app talks to a new 'socket-proxy' sidecar (tecnativa/docker-socket-proxy) that exposes ONLY read endpoints of the Docker API — no start/stop/exec, POST disabled, the Docker socket mounted read-only, confined to an internal network only the app can reach, and never published on a host port. The app itself never touches the Docker socket. Log viewing is permission-gated (Settings access), audited, and secret-masked; deployments that skip the sidecar simply see a setup panel with the compose snippet instead.",
+        "One-click support diagnostics. Settings → Health Check also gains a 'Diagnostics' tab that replaces 'run this script on the server and email us the output': press Start, reproduce the problem, press Stop, download a single zip and attach it to your support ticket. The bundle captures container states and restart counts, per-container logs from exactly the capture window, RhythmAI's own file logs sliced to the window, health-check and Ollama snapshots (before/after), database table counts and migration state, container-to-SIEM connectivity socket tests, and a redacted copy of the configuration. Redaction is enforced, not promised: passwords, keys, tokens and secret values are scrubbed by a recursive allowlist-plus-entropy pass, the zip's manifest honestly lists the few host-only items an in-app bundle cannot include (GPU nvidia-smi, host disk/RAM, installer logs), and optional verbose capture bumps logging to DEBUG for the session only — it never persists. AI reasoning traces are excluded by default and require an explicit opt-in checkbox, since they can contain alarm content from your SIEM. Every diagnostic session is audited (started, stopped, downloaded).",
+        "User Management moves into Settings — and the user/role APIs are properly locked down. The standalone Users app card is gone; user and role administration now lives where administration belongs: Settings → Users, with the same Users/Roles views inside (old /users bookmarks redirect automatically, and roles created in the Roles tab appear in the Add User picker immediately). Under the hood this release closes a real authorization gap: the /users and /roles APIs previously required only a valid login, so ANY authenticated account could list, create or modify users — including resetting another account's password — by calling the API directly. All user and role administration endpoints now require the Users permission. Changing a password follows an identity rule: you can always change YOUR OWN password (self-service and the forced-change-at-first-login flow are untouched for every role), while changing someone else's requires the Users permission; the force-reset flag only takes effect for permission holders, denied attempts on another account's password are recorded in the audit trail as authz.denied, and the audit trail now correctly distinguishes self-service password changes from administrator resets. NOTE for automation: if you script user provisioning against the API, the service account running those scripts must now hold a role with the Users permission — previously any account worked, which was the hole. Custom roles keep exactly the access they had: a role with only the Users permission still reaches user management (the Settings page shows it just the Users section), and a role with only Settings access no longer sees user management it couldn't reach before.",
+        "Data Indexer health — pick your window, and a cache honesty fix. The Data Indexer tab now has a 24 hours / 48 hours / 72 hours / 7 days selector, and the summary tiles follow the selected window (previously both were fixed to 24 hours, so a quiet day read as 'no SIEM load at all' even when the history had activity). Windows are also labeled in plain words ('7 days', not '168h'). Behind it, a cache-poisoning bug is fixed: a user-artifact pull runs two SIEM searches (login and account fields), and when one of them timed out while the other legitimately returned zero, the pull was cached as a confident 'exact 0 events' — analysts then saw 'no activity' for an artifact that had plenty. A pull that partially fails now either reports its results as inexact or fails outright; it never caches a false zero.",
+        "Threat Universe investigation fixes. Deep links from Alarm Investigation now build their time window in the alarm's local time — SIEM alarm timestamps were being parsed as UTC, which shifted the self-heal window by the UTC offset and could miss the alarm entirely (and skewed the auto-picked window preset). Case notes created from a story-mode analysis now carry the full narrative analysis instead of whatever the last short follow-up answer happened to be. Follow-up answers no longer inherit a '✅ Next' checklist from earlier answers in the conversation.",
+        "Quieter, cleaner logs — visible now that you can see them. The app's startup no longer attempts a legacy database index that has failed on every boot since the data model changed (multiple log sources legitimately share a type); postgres logs are free of the recurring 'could not create unique index' ERROR block that every deployment has been accumulating silently. Container log output across services is also bounded in compose (json-file rotation, 50 MB × 5 per service), so logs can no longer grow without limit on the host.",
+        "No database migration — but the compose file changes this release. Pull the 1.2.24 app image and recreate the app container. To get Container Logs and full Diagnostics, add the new socket-proxy sidecar and logs-net network from the reference compose — the customer update scripts (shipped since 1.2.23) detect the compose change, show you the diff, and ask before replacing; the image also ships the reference compose at /app/deploy/docker-compose.yml. A deployment that declines the sidecar loses nothing it has today: Container Logs shows a setup panel, Diagnostics still produces a bundle with the container-level sections marked unavailable, and everything else works. The Ollama pin (0.20.6), RhythmAI:9b model, prompts and context budgets are unchanged."
+      ]
+    },
+    {
+      "version": "1.2.23",
+      "date": "2026-08-08",
+      "servicesChanged": ["app"],
+      "summary": [
+        "Audit trail for every analyst action",
+        "New Data Indexer health tab",
+        "Threat Universe answers now cite real evidence",
+        "No action required"
+      ],
+      "highlights": [
+        "Enterprise audit telemetry — RhythmAI now records its own activity. Every analyst action inside the app (logins and login failures with a reason, logouts, permission denials, user and role administration, configuration and secret changes, AI investigations, Data-Indexer pulls, triage briefs, reputation checks, AI analyses, case creation, and skill/MCP approvals and executions) is written as an audit event: always to a local rotating trail at logs/audit.log (one JSON object per line, 50 MB × 5 backups) and, when configured, forwarded to your SIEM as standard RFC 5424 syslog over UDP or TCP. Configure it under Settings → Audit & Telemetry: master switch, syslog host, port, protocol and facility, plus a 'Send test event' button that reports each sink's result. Ingest it either way — point a syslog source at the collector, or have a LogRhythm agent file-monitor logs/audit.log (the compose file now mounts it on the host). Audit emission is fully non-blocking and can never slow or fail an analyst request; passwords, tokens, API keys, secret values and LLM prompt/response bodies are never written — configuration and secret events carry key NAMES only.",
+        "Data Indexer health — evidence of what RhythmAI asks of your SIEM. Settings → Health Check gains a 'Data Indexer' tab listing recent Threat Universe pulls with the analyst who ran each one, the artifact queried, the time window, whether it was served from cache or hit the Data Indexer live, how many logs came back, and how long the live query took (colour-coded), plus a 24-hour summary of live versus cache-served pulls with median and slowest query times. Built so a customer question about SIEM load can be answered with data rather than assurances — and it shows plainly that repeat views cost the Data Indexer nothing.",
+        "Threat Universe — investigation quality and honesty. Analyze-with-AI now cites named evidence (documents, commands, per-event times) from the pulled logs instead of only counts; answers are scoped to the artifacts the analyst actually assembled rather than the whole environment; grounded follow-up suggestions appear under each answer, minted only from data already in context and retired once asked, including investigative-progression questions (was the privilege change used, is there persistence, did anything leave the network, what preceded the successful logon); traced paths are narrated hop by hop from the shared raw-log evidence between the two artifacts, with co-occurrence never described as a directed connection; and a Stop button ends a running analysis. The assistant also renders tables and lists properly and highlights artifact names in-line.",
+        "Threat Universe fixes. Expanding an artifact that reached the canvas through another artifact's cached pull now renders its activity instead of silently drawing nothing; deep links from Alarm Investigation resolve alarms that fall outside the 3,000-node display cap by narrowing the window around the alarm automatically; a canvas click during an AI answer no longer discards that answer; and Data-Indexer case notes are formatted for reading.",
+        "No database migration. Pull the 1.2.23 app image and recreate the app container. The audit trail is ON by default and syslog forwarding is OFF until you set a host, so the upgrade changes nothing on your network until you configure it. The Ollama pin (0.20.6), RhythmAI:9b model, prompts and context budgets are unchanged."
+      ]
+    },
+    {
+      "version": "1.2.22",
+      "date": "2026-08-06",
+      "summary": [
+        "Threat Universe keeps your investigation trail",
+        "AI analysis reads as a kill-chain story",
+        "Honest IP reputation in triage briefs",
+        "No action required — update the Chrome extension"
+      ],
+      "highlights": [
+        "Threat Universe — investigation continuity. The detail panel now navigates like an investigation instead of a stack of dead ends: clicking any artifact (from a chip, a brief row, or the canvas) leaves a 'Back to alarm details' trail with the alarm as home base; returning restores the triage brief instantly (no rebuild click); artifact panels open directly on raw-log context that was already pulled this session — log count, cache age, and every activity chip — instead of re-offering a pull that already ran; panel chips now mirror the canvas exactly (every pulled event/host/user/IP renders, not a top-3 cut); the MITRE technique wall collapses behind a one-line summary; and the risk filter wears live per-severity alarm-count badges.",
+        "Analyze with AI — the investigation as a story. The Graph Assistant's one-click analysis now answers with a chronological narrative (up to 500 words) in scannable kill-chain stage sections (🔎 assessment, then ⚔️ credential attack, 🚪 access, ⬆️ privilege escalation, 🧹 defense evasion, … each with who did what to whom and counts/times copied verbatim). The stage list is gated deterministically: the backend scans the actual pulled evidence and only offers the model stages that have data — no 'no evidence found' filler sections, no invented events, no next-step checklists. When activity is continuous, the ordering is inferred from event types and says so.",
+        "Honest IP reputation in the triage brief. The reputation section now renders all four truth-states instead of two: cached AbuseIPDB scores, cached score 0 (a record exists and reports no abuse), public IPs not yet checked (with an inline 'Check now' live-check button), and addresses AbuseIPDB cannot cover — each named with the reason (private, RFC 5737 documentation range, IPv6, …) instead of being lumped as 'private/reserved'. A set with public IPs can no longer be mislabeled 'No public IPv4 artifact', and a failed reputation lookup states nothing rather than something wrong.",
+        "Graph schema self-heal on upgrade — no action required. Threat graphs built by versions before 1.2.21 lack the alarm→artifact INVOLVES edges the Threat Universe needs, and the old coverage check (node counts) could never detect that — on upgraded sites most alarms showed no linked artifacts. The graph now carries a schema-version stamp; on mismatch (or on legacy unstamped graphs) the self-heal rebuilds the graph from PostgreSQL automatically within one sync cycle of the first start on 1.2.22.",
+        "Chrome extension v1.2.22 — works with your console's port. The RhythmAI right-click menu and sidepanel previously appeared only when the LogRhythm Web Console ran on port 8443; consoles on 443 or a custom port got nothing. Detection is now port-independent: the extension recognizes the console itself (page title plus the console's own navigation UI, confirmed in the page) and still never activates on ordinary websites. Customers who want it pinned can set an explicit Console URL in the extension's settings — leave it empty for auto-detect. Reload/update the extension to get this.",
+        "No database migration. Pull the 1.2.22 app image and recreate the app container (compose unchanged from 1.2.21 apart from the image tag). Update the Chrome extension from the 1.2.22 package. The Ollama pin (0.20.6), RhythmAI:9b model, prompts, and context budgets are unchanged."
+      ]
+    },
+    {
+      "version": "1.2.21",
+      "date": "2026-08-04",
+      "summary": [
+        "Threat Universe becomes a full investigation surface",
+        "File real LogRhythm cases from the graph",
+        "Graph data no longer lost on restart",
+        "Compose file update required — recreate Neo4j container"
+      ],
+      "highlights": [
+        "Threat Universe — from visualization to investigation surface. The graph now carries a full investigator workflow: click any alarm or group and the detail panel produces a deterministic TRIAGE BRIEF (scope, blast radius, kill-chain arc, IP reputation, MITRE context, peer knowledge, and suggested next steps — each a one-click action, never an LLM guess); every artifact row offers raw-log context pulled from the Data Indexer with cached results shown instantly ('Show') and an explicit fresh re-pull ('⟳'); artifact activity counts are now EXACT across the full search window instead of a newest-200 sample (a lab artifact that sampled at ×72 truly counts ×996 — the panel says which mode produced the number); flagged IPs wear an AbuseIPDB reputation ring on the canvas (absent reputation renders as 'not checked', never 'clean'); and an investigation narrator turns pulled context into a chronological story with a kill-chain fallback when timestamps are continuous. Reaching the Universe is now one click from four surfaces — Alarm Investigation, Incident Detail, Alarm Correlation, and AI SOC — via a deep link that opens the GROUPED canvas, auto-picks a time window covering the alarm's age, and pins the camera to the alarm through the physics settle (a follow-cam tracks it while the layout organizes, so it lands dead-center instead of drifting off-screen). Filters apply as you edit (debounced, with validation gates), the artifact filter accepts comma-separated terms matched ANY-style, a Top Alarms sidebar ranks Critical/High rules with one-click rule-wide spotlight, and quiet views (≤30 alarm nodes on canvas) label every alarm with its rule name — dense views keep the anti-smear hover-only policy.",
+        "Graph Assistant files REAL cases. Asking the Threat Universe chat to create a case now produces a rich LogRhythm case, not a bare shell: the analyst's Evidence-basket alarms attach as alarm evidence (deduplicated by rule — never hundreds of same-rule attachments), the AI investigation analysis and pulled Data-Indexer activity land as two case notes, and a PNG snapshot of the current graph canvas uploads as file evidence (new multipart upload capability in the LogRhythm SDK layer, size-guarded). Everything runs under the existing approval flow — one Approve & Run card shows exactly what will be filed, parameters are bound verbatim at approval time, and the case anchor (the alarm or group you were inspecting) auto-attaches even when the basket is empty. Case titles now use the alarm rule name.",
+        "AI investigation re-run button. When the runaway watchdog halts a degenerate investigation ('Investigation stopped — the model entered a generation loop…'), the message now carries a one-click 'Re-run investigation' button beside the copy icon instead of making the analyst hunt for how to retry. The backend always generates fresh, so a retry is a clean attempt; the button disables itself while a run is in progress.",
+        "Neo4j graph store no longer wiped on container restart — ROOT CAUSE FIX, customer action required. All four Neo4j mounts (/data, /logs, import, plugins) previously shared ONE Docker volume, and the Neo4j image entrypoint's boot-time cleanup of the auxiliary paths tore through the shared volume and deleted the graph database itself on EVERY container start. The symptom was masked because RhythmAI's hourly self-heal rebuilt the graph from PostgreSQL, so the graph appeared healthy within the hour but silently lost history on every restart. The compose files now give each mount its own volume (/data keeps the original volume name, so no data migration). Defense-in-depth: the rolling-window self-heal check now runs EVERY sync cycle (~60s) instead of only when new alarms arrive, so even a fresh-start graph repairs within a minute rather than up to a day. ACTION: after updating docker-compose.yml, recreate the neo4j container (docker compose up -d neo4j); the graph rebuilds automatically from PostgreSQL within one sync cycle.",
+        "Rhythm Insights — Rule Quality leaderboard. The Coverage tab now surfaces the LLM rule-quality assessments in one place: a tier distribution (Good/Fair/Low/Poor) plus every assessed rule ranked worst-first with false-positive risk, alert-fatigue risk, enabled state, and TDIR categories. Previously these assessments (10-20 GPU-minutes to produce) were only visible inside individual rule expansions.",
+        "New RhythmAI branding. Refreshed logo across the app header, login page, favicon, and Chrome-extension icons; the Home page card formerly labeled 'RhythmSOAR' is now 'RhythmSkills' with 'Actions'. Extension icons take effect on the next extension update/reload.",
+        "No database migration. Update compose (or reinstall via installer), pull the 1.2.21 app image, recreate the app AND neo4j containers. The Ollama pin (0.20.6), RhythmAI:9b model, prompts, and context budgets are unchanged from v1.2.20."
+      ]
+    },
+    {
+      "version": "1.2.20",
+      "date": "2026-07-01",
+      "summary": [
+        "Instant answers for every suggested Insights question",
+        "Factual answers in Arabic, French and Spanish",
+        "No action required"
+      ],
+      "highlights": [
+        "Rhythm Insights AI Assistant — new routed question: 'Are there any IPs that show up as both origin and impacted?'. This is one of the Assistant's own suggested prompts, and until now it fell through to the LLM, where it reliably triggered a reasoning spiral: the small model enters its `<think>` block, audits its formatting rules, never emits the closing tag, and runs to the token cap (reproduced on dev at 9 out of 10 attempts when asked as a follow-up in an existing conversation, ~90-120 seconds each, with a no-think fallback rescue). The factual router (v1.2.18) now serves this question directly from the pre-aggregated alarm-IP table: it folds the last-90-day alarm activity by IP, keeps only the addresses that appear in BOTH the origin and impacted directions, and returns a ranked table with the exact origin/impacted alarm counts — the same numbers the dashboard shows, in about one second, with no LLM involvement and therefore no possibility of a spiral. Root cause of the underlying spiral (confirmed on dev this cycle): it is not the prompt wording and not fixable by prompt edits — three A/B experiments (de-conflicting the rules, and stripping ~2,000 characters of formatting rules) left the spiral rate essentially unchanged, because the reasoning behavior is inherited from the base Qwen 3.5 model, not from RhythmAI's fine-tune. Routing the deterministic questions out of the LLM is the reliable fix; the v1.2.19 watchdog remains as the backstop for anything unrouted.",
+        "Two more suggested prompts routed out of the LLM, completing the alarm-activity question set. 'What IP addresses appear most frequently in alarms?' previously fell through to the LLM and spiralled its reasoning (watchdog-halted at ~2 minutes on dev, with no answer for the analyst); it is now served from the alarm-IP aggregate as a ranked top-15 table by total alarm involvement (origin + impacted), in about a second. 'Which users trigger the most alarms?' is now served from the alarm-login aggregate as a ranked top-15 table — deliberately WITHOUT a 'percentage of total' column: the pre-aggregated context holds only the top-50 logins, not the grand total, so any percentage would be a fabricated figure (a verified case had the model report ~16% for the top user when the true share was ~47%). Instead the answer states a factual, exact top-vs-next-highest ratio (e.g. 'the top user triggers 2.6x the next-highest'). Both new answers are fully multilingual like the rest of the routed set. Together with the origin/impacted-IP question, a customer clicking any of the Assistant's suggested alarm questions now gets a fast, deterministic, dashboard-accurate answer instead of risking a reasoning spiral.",
+        "Four rule-analysis suggested prompts routed, closing the last factual gap. 'Which rules generate the most alarms but have low quality scores?' — a compound question v1.2.18 deliberately left to the LLM assuming it would cope — was confirmed on dev to spiral the model's reasoning (watchdog-halted at ~2 minutes, twice, with no answer for the analyst); it is now served as a deterministic join of the rule and alarm-activity aggregates (rules that have alarm volume AND a quality score below 0.50, highest-volume first), in about a second. Also newly routed: 'Which rules have high false-positive risk?' (worst composite score first, as a tuning-priority list), 'Which rules are enabled but have never triggered an alarm?' (the silent-rule list), and 'Which rules have the best quality scores?'. With these, EVERY factual suggested prompt in the Assistant — all alarm-activity and rule-analysis questions — is now answered deterministically from Postgres in about a second. Only genuinely strategic prompts (priorities, ROI, gap analysis, board briefs) still use the LLM, where open-ended reasoning is appropriate and does not spiral. All four new answers are fully multilingual.",
+        "Multilingual factual answers. Every routed factual pattern — alarm counts by severity/time, alarm volume, overall coverage score, log-source health, rule-status counts, lowest-scoring rules, origin/impacted IPs, most-frequent IPs, top users, and the four rule-analysis questions above — now answers in the language the analyst requests. An analyst can type the question in English and ask for the answer 'in Arabic' (or French, or Spanish) — the router matches on the English keywords, then renders the answer in the requested language, with every number, IP address, percentage, and rule name preserved exactly (these are language-neutral and slotted into the localized template unchanged). Localization uses hand-authored deterministic templates, NOT machine translation, so there is zero added latency (the answer is still ~1 second, no second model call) and zero risk of a mistranslated or corrupted figure. Language is resolved by: an explicit request in the question ('in Arabic', 'بالعربية') wins first; otherwise the script the question is typed in (an Arabic-typed question gets an Arabic answer); otherwise English. A question typed in a fully non-English form, or a request for a language outside the built-in set (English, Arabic, French, Spanish), continues to flow through the LLM, which answers in that language as before. English output is byte-for-byte identical to v1.2.19 — customers who only work in English see no change whatsoever.",
+        "No database migration. Direct `docker compose pull` + container recreate is sufficient — no customer action required. This release is backend-only (the factual-router module); the RhythmAI:9b model, system prompts, context window, num_predict budget, watchdog, Ollama pin, and frontend are all unchanged from v1.2.19. The change is purely additive: a new routed question pattern and a localization layer over the existing routed answers. Anything the router does not intercept flows through the LLM exactly as before."
+      ]
+    },
+    {
+      "version": "1.2.19",
+      "date": "2026-06-24",
+      "summary": [
+        "Runaway AI investigations fixed at the root",
+        "Watchdog stops stuck investigations and chats",
+        "Compose file update required — pin the Ollama version"
+      ],
+      "highlights": [
+        "Alarm & Incident Investigation runaway fixed at the ROOT: the Ollama runtime is now pinned to 0.20.6 in every shipped compose file. Field report from an Ubuntu / NVIDIA A10 customer site: every AI investigation 'spun forever', streaming endless repeating/gibberish text and never completing (the analyst had to hit Stop each time). Root cause confirmed by A/B reproduction on identical inputs -- same RhythmAI:9b model digest (20ac65dc7ba0), same prompts, same sampling parameters, with ONLY the Ollama runtime changed: Ollama 0.20.6 produced 0 runaways across a 13-alarm batch, while Ollama 0.30.10 produced 12 runaways across the same 13 (0% -> 92%). The trigger was the floating `ollama/ollama:latest` image tag: the customer's fresh install pulled 0.30.10, a runtime with a generation regression that prevents RhythmAI:9b from emitting its end-of-sequence token, so it generates all the way to the num_predict cap (~7.5 minutes on an A10). Validated deployments had been running the older 0.20.6 via the same `latest` tag pulled months earlier, which is why the behavior was never seen in-house. The model, prompts, and parameters are byte-identical across both versions -- the regression lives entirely in the Ollama runtime/sampler. Fix: all compose files (Windows installer, Ubuntu installer, and deploy variants) now pin `ollama/ollama:0.20.6` instead of `latest`, permanently eliminating the version drift for every future install.",
+        "Server-side runaway watchdog added to Alarm & Incident Investigation as defense-in-depth. Independently of the Ollama pin, the streaming generation loop now inspects output as it is produced (about once every 1,500 characters -- negligible cost) and stops a degenerate generation that would otherwise run to the ~24K-token cap. It detects visible output exceeding 40,000 characters (healthy reports are 2-4K), a report section header repeating (section cycling), near-zero text diversity in the tail (token loops), low line diversity (phrase loops), and an unclosed reasoning block exceeding 32,000 characters. On a trip it finalizes gracefully -- keeping any usable partial report with a truncation note, or showing a clear 'investigation stopped, please re-run' message -- so the UI never hangs on 'Analyzing...'. Validated on 14 real reports (densest alarms up to 334 correlations, largest incidents up to 6,216 aggregated alarms): zero false positives, ~10-12x headroom over the largest legitimate report. With Ollama pinned the watchdog should rarely fire; it exists to bound any residual or future runaway, not to prevent it.",
+        "Coverage AI Assistant (Rhythm Insights chat) now has the same runaway watchdog. The same A10 site hit a separate, related failure: a strategic coverage question ('which users trigger the most alarms -- is this normal or concerning?') spiraled inside the model's reasoning block and hung for 5+ minutes ('Thinking...' forever) until the analyst cancelled it. Unlike the alarm runaway this is NOT the Ollama version -- it happens on the validated 0.20.6 runtime -- it is the heavy coverage system prompt driving the small model to over-reason on open-ended/strategic questions. The factual router (v1.2.18) already shields the common factual questions by serving them straight from Postgres with no LLM; this release extends the watchdog to the coverage chat streaming path with coverage-calibrated ceilings (think 12,000 chars / visible 16,000 chars; the alarm section-header check is disabled since coverage answers don't use those headers). When a coverage question spirals, the watchdog now cuts it within seconds and the existing no-think rescue produces a real answer -- or, if nothing usable comes back, a clear 'analysis stopped, ask a more specific question' message -- instead of a 5-minute hang. Pressure-tested on dev against 9 real strategic/compliance/analytical coverage questions: zero false positives, largest legitimate answer 3,104 chars (~5x headroom under the ceiling). num_predict for coverage stays at 24,576 (load-bearing for long compliance answers, set v1.2.6) -- the watchdog is selective (it cuts only degenerate output), not a blunt length cap.",
+        "No database migration. For new installs, `docker compose pull` + recreate is sufficient and the Ollama pin applies automatically. Deployments already hit by the runaway (those that pulled `ollama/ollama:latest` and received 0.30.10) get immediate relief by pinning their Ollama image to 0.20.6 and recreating ONLY the ollama container -- the model and all data persist in the Docker volume, so there is no app reinstall and no model re-download. The app image (watchdog backstop) is the only code change in this release; the RhythmAI:9b model, system prompts, context window, and num_predict budget are all unchanged from 1.2.18."
+      ]
+    },
+    {
+      "version": "1.2.18",
+      "date": "2026-06-17",
+      "summary": [
+        "Common coverage questions answered in under a second",
+        "No more invented MITRE technique IDs",
+        "Shorter answers for simple questions",
+        "No action required"
+      ],
+      "highlights": [
+        "Rhythm Insights AI Assistant — Coverage Analysis factual router. Six common question patterns are now answered directly from the pre-aggregated Postgres tables (which v1.2.5 originally designed for this purpose) instead of going through the LLM. The demo's canonical failing question — 'How many critical or high-risk alarms do I have today?' — went from 234 seconds of `<think>`-storm with a no-think fallback rescue down to a deterministic sub-second answer that always cites the same numbers the dashboard does. The routed patterns: (1) alarm counts by severity and time window ('how many critical alarms today', 'how many high-risk alarms in the last 24 hours'), (2) alarm volume by severity for a time window ('alarm volume by severity for the last 7 days'), (3) overall coverage score and categories covered ('what's my overall coverage score'), (4) log source health counts ('how many unhealthy log sources'), (5) rule status counts including the enabled-but-silent figure ('how many enabled rules', 'how many enabled but silent rules'), (6) bounded list of lowest-scoring rules with an optional threshold ('list rules with composite score below 30', 'show me the lowest-scoring rules' — capped at 15 rows per the formatting consistency rule). Answer shape scales with question specificity — a sharp question like 'how many critical alarms today' returns a single sentence with the count and a 90-day baseline comparison, while broader questions like 'show me alarm volume by severity' render the full 4-row × 4-time-window table. Each routed answer streams the same SSE event sequence the LLM path uses (progress, content, suggestions, token_usage, done) so the UI behavior is identical from the analyst's perspective — same progress bar, same suggested follow-up prompts at the bottom, same token usage indicator. Strategic questions, compound questions ('which rules generate the most alarms but have low quality scores'), per-rule analysis, multi-turn follow-ups, and anything the router doesn't have a pattern for continue to flow through the LLM exactly as in v1.2.17. The router is gated on `isCoverageAnalysis=true`, so Alarm Investigation, Incident Investigation, the standalone AI Assistant, and the Chrome extension popup are completely untouched. Errors in the router (Postgres unavailable, unexpected data shape) fall through to the LLM path — graceful degradation. Closes the v1.2.16 → v1.2.17 trace finding that the 9B's `<think>`-storm pattern on factual questions wasn't a framework-count problem (dev with 4 frameworks reproduced demo's 10-framework failure identically); the actual mechanism is the 21-rule system prompt becoming a compliance checklist the model audits 800+ times per response. Routing the question out of the LLM eliminates that whole class of failure for the most common analyst workflow (open Assistant, ask one factual lookup, close).",
+        "MITRE technique-ID hallucination loop closed for the 'list rules below score X' question class. When asked to list low-scoring rules, the 9B was falling into an autoregressive pattern-continuation attractor — once a few real rules with MITRE-format names appeared in the output ('T1057:Process Discovery', 'T1078.002:Domain Accounts'), the model's sampling locked onto the pattern 'T<incrementing-number>:<cycling-technique-name>' and emitted fabricated entries (verified case: T1525 → T3787, roughly 2,260 fake MITRE techniques that don't exist in the real catalog). repeat_penalty=1.3 doesn't catch this because each line is technically a different string. Router pattern 6 ('list rules with composite score below X' / 'show me the lowest-scoring rules' / 'rules with low quality scores') now serves a bounded 15-row table from the rules aggregate with rank, name, composite score, quality score, FP risk, and 90-day alarm count — no LLM, no autoregressive surface, no hallucination. Tested on dev with the question that originally triggered the loop ('list all rules with composite score below 30') and confirmed: 200 matching rules detected, lowest 15 shown, sub-second response, all rule names match the database. The compound 'most alarms + low quality' intersection question still flows through the LLM (the router's anti-match keeps it from intercepting cross-table reasoning), and the LLM handles that question type cleanly since the alarm-count constraint bounds the answer space.",
+        "Answer-length proportional to question specificity. Earlier router output always rendered the full severity × time-window table for any alarm-count question, which felt heavy-handed for a one-cell question. The handler now branches on what the user actually asked: specific severity + specific time ('how many critical alarms today') → one-line answer with the count; specific severity + no time ('how many critical alarms') → that severity across all four windows in a single line; all severities + specific time ('alarm volume in the last 7 days') → severity breakdown for that window in a single line; broad query without any qualifier ('alarm volume by severity') → the full 4-row × 4-time-window reference table. Every variant ends with one sentence comparing the relevant window's volume to the 90-day daily or weekly baseline, marked with 'elevated activity', 'quieter than usual', or 'in line with' depending on the ratio.",
+        "No database migration. Direct `docker compose pull` + container recreate is sufficient — no customer action required. The factual router is purely additive (new module, new constructor parameter, new chat_streaming early-return); the system prompt is unchanged; the LLM path is unchanged for anything the router doesn't intercept. Customers who never hit one of the six routed question patterns will see identical behavior to v1.2.17. Customers who DO ask the failing question will see it answered in sub-second time instead of 234 seconds, with the same numbers the dashboard shows."
+      ]
+    },
+    {
+      "version": "1.2.17",
+      "date": "2026-06-07",
+      "summary": [
+        "AI Assistant opens instantly — no setup wait",
+        "Removed a suggested question we cannot answer",
+        "No action required"
+      ],
+      "highlights": [
+        "Rhythm Insights AI Assistant pre-warm REMOVED. The 'Optimizing AI assistant — first time setup takes about 30 seconds' banner that appeared every time you opened the Assistant has been removed. The modal now opens instantly — you can type your question immediately, the suggested-prompt pills are active from the moment the welcome message renders, and the send button is enabled right away. Customers who open the Assistant for a single quick lookup (e.g. 'how many critical alarms today?') no longer pay a 15-25 second banner wait to ask one factual question. The first chat after the model has been idle for >5 minutes will still pay a ~5-15 second cold-load cost on the user's question itself (the 9B model loads into VRAM on first generation), but this is amortized across the actual answer streaming so the user sees progress immediately. Subsequent chats land in 1-5 seconds as before. Background: pre-warm was shipped in v1.2.12 to address a 5-7 minute first-response symptom that we attributed to prompt-processing time. v1.2.13/1.2.14 metrics + the v1.2.16 ANSWER TYPE TRIAGE prompt fix proved the 5-7 minute pattern was actually a <think>-storm caused by the system prompt forcing strategic reasoning on every question. With v1.2.16 making factual lookups answer in 3-5 seconds even on cold model, pre-warm was solving a problem that no longer existed at the scale it was designed for. Diagnostic investigation also confirmed a latent num_predict cache-key mismatch bug in the pre-warm path that meant the prompt KV cache it built was invisible to the user's actual chat session — so even when pre-warm 'completed successfully', it was only delivering ~13 seconds of cold-load shifting, not the full prompt-cache benefit it was sold on. Net effect: ~200 lines of frontend + backend code removed (prewarm endpoint, PrewarmBanner component, prewarm state machine, AbortController plumbing, 90s soft-unlock, frontend gate logic, message-equality test), zero customer-visible regression, materially better UX for the most common customer usage pattern (single-question lookups).",
+        "Coverage chat suggested prompts: removed 'Are critical alarms trending up compared to earlier in the week?' from the alarms category. The coverage dataset only contains Today / Last 24h / Last 7d / Last 90d aggregate totals — there is no daily breakdown or time-series in the context, so the 9B model could only honestly answer 'I don't have that data'. Suggesting a question we can't answer is a poor first impression for an analyst. The prompt will be re-added once the backend exposes a daily severity time-series in the alarm-activity section of the coverage context (tracked as an outstanding item).",
+        "No database migration. Direct `docker compose pull` + container recreate is sufficient — no customer action required. The change is purely additive removal of the pre-warm flow; chat behavior is unchanged. Modal opens instantly on click, first cold-model question pays ~10-15s, subsequent questions are 1-5s. Same model, same data, same context window, same system prompt as v1.2.16."
+      ]
+    },
+    {
+      "version": "1.2.16",
+      "date": "2026-06-06",
+      "summary": [
+        "Factual coverage questions answer in seconds",
+        "Strategic questions keep their full reasoning",
+        "No action required"
+      ],
+      "highlights": [
+        "Rhythm Insights AI Assistant — Coverage Analysis system prompt rewrite for query-type triage. Simple factual lookup questions (e.g. 'how many critical or high-risk alarms do I have today?', 'what's my alarm volume by severity last 7 days?', 'which users trigger the most alarms?') now answer in under 5 seconds with a clean table-and-one-sentence response. Previously these questions could spiral for 3-5 minutes inside the model's `<think>` block before hitting the 24K num_predict cap and triggering a no-think fallback that produced a degraded answer. Root cause: the coverage system prompt instructed the model to apply 21 numbered rules + 4 'CRITICAL' sections (strategic thinking, industry personalization, compliance awareness, formatting consistency, output length limits) to every question — including simple one-cell lookups in the pre-aggregated alarm-severity table. The fix adds an ANSWER TYPE TRIAGE section at the top of the system prompt that splits questions into FACTUAL LOOKUP (count, list, simple trend) → answer in <=50 words, skip strategic/industry/compliance framing; STRATEGIC (priorities, ROI, where to invest) → full strategic framework; COMPLIANCE (framework-specific gaps) → compliance section. The STRATEGIC THINKING, PERSONALIZATION, and COMPLIANCE AWARENESS section headers are also marked '(apply for STRATEGIC queries ONLY — skip for FACTUAL LOOKUP)' so the conditional gating reinforces itself in the model's reasoning path. Measured improvement on the demo dataset: 'how many critical/high-risk alarms today?' went from 204.86s with 24,576 eval_tokens hit-cap + no-think fallback rescue, down to 3.11s with 174 eval_tokens and a clean closed `<think>` block — same data, same model, same context window, 66x faster wall-clock, no degradation. STRATEGIC questions still get the full reasoning treatment unchanged. This release also explicitly tells the model to trust the pre-aggregated data tables and NOT re-derive numbers from raw rule lists when a summary row already has the answer — closes a class of slow-thinking patterns where the 9B was second-guessing aggregations the backend had already done.",
+        "No database migration. Direct `docker compose pull` + container recreate is sufficient — no customer action required. Change is purely prompt-side; works on the same `imetaexabeam/rhythmai:9b` model fine-tune."
+      ]
+    },
+    {
+      "version": "1.2.15",
+      "date": "2026-06-06",
+      "summary": [
+        "Background work pauses while you chat",
+        "Steadier AI Assistant answer quality",
+        "No action required"
+      ],
+      "highlights": [
+        "Rhythm Insights background worker now defers its LLM-heavy steps when a user chat is in flight. The v1.2.13/1.2.14 metrics showed that the demo customer's intermittent `<think>`-storm pattern (24K-token reasoning, no-think fallback, 5-10 minute coverage chat waits) lined up with the insights worker's daily Tier C tick firing concurrent LLM calls against Ollama's `OLLAMA_NUM_PARALLEL=2` slots. With both slots busy and the worker holding one, the user chat's KV cache could get partially evicted mid-generation, sending the model into a reasoning loop until it hit num_predict, then dropping to the no-think fallback that produced the visibly-degraded final answers. A new `InvestigationService._active_user_chats` counter is now bumped at the start of every user-facing streaming method (alarm investigation, incident investigation, AI Assistant chat) and decremented in `finally`. The insights worker reads `InvestigationService.is_user_chat_active()` before kicking off any of its 4 LLM-heavy steps — auto-classify (5-min tick), rule quality assessment, LLM contextual recommendations, and executive summary (all 24-hour tick). If a user chat is mid-flight, the worker logs an INFO line and defers the step; the auto-classify retries on the next 5-min outer cycle, and the entire daily Tier C block defers as a unit (maximum 5-minute wait after the user finishes chatting). Non-LLM steps in the worker — composite score calculation, coverage recalculation, gap snapshots, template recommendations, log source sync, entity sync — are unaffected and continue running on schedule. Net effect: customers who keep the AI Assistant open for an extended Q&A session no longer see worker-driven slot contention disrupt their chat quality. The fix is intentionally pessimistic (any active chat defers any worker LLM call) since the contention symptom is severe and the deferral cost is small. Single-process asyncio, atomic int operations, no lock needed.",
+        "No database migration. Direct `docker compose pull` + container recreate is sufficient — no customer action required. Worker behavior change is purely additive: if a customer never opens the AI Assistant, the worker behaves identically to v1.2.14."
+      ]
+    },
+    {
+      "version": "1.2.14",
+      "date": "2026-06-05",
+      "summary": [
+        "New logging to diagnose slow or choppy chats",
+        "No action required"
+      ],
+      "highlights": [
+        "Per-chat eval metrics extended with think-block analysis. The `Chat metrics:` INFO log line introduced in v1.2.13 now also reports `think_blocks=N` (count of `<think>...</think>` blocks the model emitted), `think_chars=N` (total characters across all think blocks, including the tags themselves), and `visible_chars=N` (what the user actually saw streamed after ThinkTagFilter stripping). Used to explain customer-reported 'choppy streaming' complaints — Alarm Investigation typically produces 1 contiguous think block then a steady output flow (smooth), while Coverage Analysis frequently emits multiple think blocks interleaved between answer sections (visibly chunky — streaming pauses each time the model re-enters reasoning, even though total tokens/sec is unchanged). The think-block-counting scan is O(n) over the response string and runs once at end of stream — microseconds of CPU work, zero impact on streaming throughput. Same log line format as v1.2.13, just with three additional fields.",
+        "No database migration. Direct `docker compose pull` + container recreate is sufficient — no customer action required."
+      ]
+    },
+    {
+      "version": "1.2.13",
+      "date": "2026-06-04",
+      "summary": [
+        "Per-chat speed metrics now in the logs",
+        "Helps spot slow chats and regressions",
+        "No action required"
+      ],
+      "highlights": [
+        "Per-chat Ollama eval metrics logging. Each completed alarm investigation, incident investigation, and AI Assistant chat (coverage mode + general AI Assistant) now emits an INFO log line at the end of streaming with the actual prompt tokens processed, eval tokens generated, prompt-processing rate (tokens/sec), generation rate (tokens/sec), and total wall-clock duration — read from Ollama's response metadata. Format: `Chat metrics: mode=<alarm|incident|coverage|assistant|investigation-chat> prompt_tokens=N (R tok/s) eval_tokens=M (R tok/s) total=Ds`. Used to compare per-token throughput across modes (e.g. coverage at num_ctx=65536 vs alarm investigation at num_ctx=32768, where the larger KV cache for coverage means visibly slower per-token generation on lower-bandwidth GPUs like the RTX 5000 Ada). Also useful for spotting performance regressions across releases. No functional change to any code path — purely additive observability for ops + Hassan + customers debugging slow chats. The log line is at INFO level so it's visible without changing log verbosity.",
+        "No database migration. Direct `docker compose pull` + container recreate is sufficient — no customer action required."
+      ]
+    },
+    {
+      "version": "1.2.12",
+      "date": "2026-06-04",
+      "summary": [
+        "Much faster first answer from the AI Assistant",
+        "Alarm investigations no longer finish empty",
+        "GPU memory freed as soon as you close",
+        "No action required"
+      ],
+      "highlights": [
+        "Rhythm Insights AI Assistant first-response time dropped from ~5-7 minutes to ~5-15 seconds for follow-up questions, and ~30-60 seconds for the very first question after opening the panel. When a customer opens the Assistant from Rhythm Insights, a new 'Optimizing AI assistant — first time setup takes about 30 seconds' banner appears while the backend pre-warms Ollama's KV cache with the full coverage context (a new POST /api/insights/assistant/prewarm endpoint sends a tiny num_predict=4 completion that walks Ollama through prompt processing for the ~30-60K token coverage dataset). By the time the user reads the welcome message and clicks a suggested prompt, the model has the prompt fully cached server-side and only needs to think + answer. The send button, suggested-prompt chips, and message input are visually disabled with an 'Ask anything... (preparing assistant)' placeholder during the warmup so analysts don't fire a question before the cache is populated. A 90-second soft-unlock allows the gate to be overridden to the existing slow path if needed (rare — most prewarms complete in 10-15 seconds). Closing the modal mid-prewarm aborts the in-flight HTTP request via an AbortController, freeing the Ollama slot for other workloads. No customer-facing configuration; the prewarm fires automatically on every Assistant open.",
+        "Rhythm Insights Coverage Analysis context window raised from 32K to 64K tokens (and auto-scales to 128K for very large coverage datasets above ~49K estimated prompt tokens). Previously, generation on top of large coverage prompts could exceed the 32K window, causing Ollama's rolling-window eviction to drop the system prompt mid-thinking; the model would lose its formatting instructions, get stuck in a <think>-loop, and trigger the no-think fallback (which loses reasoning quality and produces lower-grade answers). The new 64K floor (~4.4 GB KV cache on the 9B model) keeps the system prompt alive throughout generation regardless of how long the <think> block runs. Fits comfortably on the 32 GB customer minimum GPU with OLLAMA_NUM_PARALLEL=2 (total ~14 GB residency). Coverage paths now use their own ChatOllama instance (isolated from the 32K default that alarm investigation and worker LLM calls use), so the customer's configured `context_window` in backend/config.json no longer affects coverage mode — coverage always picks at least 64K. Token estimation in the auto-scaler was also tightened from 4 chars/token to 3 chars/token to reflect the actual density of markdown-heavy coverage content.",
+        "Alarm and Incident Investigation generation budget raised from the Ollama default 4K to 24K tokens (matches Coverage Analysis from v1.2.6 and the worker-path bumps from v1.2.9). Investigating alarms with 50+ correlated events was exhausting the 4K budget inside the model's <think> block on RhythmAI:9b and emitting nothing visible to the analyst — the investigation progress UI showed 'Investigation Complete' but the chat area stayed empty. The 24K cap gives the fine-tuned model enough headroom to both reason through dense correlation chains AND emit the formatted executive-summary + MITRE TTP + IoCs + recommendations report. Customers running RhythmAI on noisy SIEMs (multi-stage attack chains, lateral-movement clusters) will see alarm investigations actually produce output instead of silently completing with no answer. think=True is preserved — the fine-tuned model still reasons explicitly, just with more headroom.",
+        "VRAM freed immediately when the Rhythm Insights AI Assistant closes. A long-standing path bug — the release-context endpoint was being called from the frontend with an incorrect '/api/' prefix (POST /api/ai-analyst/release-context), which returned HTTP 405 Method Not Allowed silently swallowed by .catch() — meant the 9B model stayed resident in VRAM for Ollama's full 5-minute default keep_alive after every coverage chat session. On customer 32 GB GPUs running RhythmAI alongside the Regex Builder (qwen2.5-coder:32b, ~22 GB resident), this 5-minute hold was blocking the larger coder model from loading. The frontend now calls the correct path (/ai-analyst/release-context without the /api/ prefix), Ollama receives a keep_alive=0 request that forces immediate model eviction, and VRAM is freed in under 1 second of clicking the close X. Duplicate-call elimination: a second release-context POST that was also firing from a useEffect in AIAssistant.tsx has been removed — the parent close handler in RhythmInsights.tsx is now the single source of truth for the release call.",
+        "No database migration this release. Direct `docker compose pull` + container recreate is sufficient — no customer action required, no re-classification needed. The Rhythm Insights AI Assistant pre-warm behavior is automatic on every modal open; the 64K coverage context and 24K alarm investigation budgets are applied automatically. Customers upgrading from any prior 1.x version go directly to 1.2.12 (no intermediate-version stepping required)."
+      ]
+    },
+    {
+      "version": "1.2.11",
+      "date": "2026-05-24",
+      "summary": [
+        "Drilldown backfill no longer stalls on dead alarms",
+        "Database migration runs automatically on startup",
+        "No action required"
+      ],
+      "highlights": [
+        "Drilldown backfill worker no longer gets stuck on permanent zombie alarms. The worker queries alarms with empty drilldown_logs to fetch from LogRhythm's DrillDownResults table, but with the previous ORDER BY date_inserted DESC the same 50 newest empty-drilldown alarms got revisited every 60-second cycle — and many of them are alarms LogRhythm will never populate (parser failures, retired log sources, transient conditions). Old alarms in the queue with potentially-usable data never got reached. Two changes: (1) flipped to ORDER BY date_inserted ASC so the worker drains the backlog chronologically; (2) added a per-alarm backfill_attempts counter (new column on alarm_drilldown_logs, migration 002). After 5 unsuccessful cycles an alarm retires from the retry loop, freeing the worker to advance through the queue. Database migration runs automatically on startup. Existing alarms get backfill_attempts=0 (DEFAULT 0 on the new column), so the 4,598-alarm zombie backlog observed at v1.2.10 deploy time will get fresh chance under the new ASC ordering and then progressively retire if SIEM still has nothing. Net: customer SIEMs whose drilldown population is flaky no longer have their backfill worker stuck pointlessly hammering the same zombies forever — the worker actually advances through the queue.",
+        "Observability: when alarms hit the backfill_attempts cap and retire from the retry loop, the worker logs an INFO line with the count and a sample of alarm IDs. Ops can correlate to specific LogRhythm rules that aren't producing drilldown and either fix the parser or accept the loss.",
+        "Direct upgrade from any prior 1.x version supported — no intermediate-version stepping required. v1.2.11 ships the first formal database migration in RhythmAI's history (migration 002 adds the backfill_attempts column). It runs automatically on container startup and is safe in all upgrade paths: (a) ADD COLUMN with DEFAULT 0 is metadata-only on PostgreSQL 11+, so it completes in milliseconds regardless of how many alarm rows you have; (b) the IF NOT EXISTS guard makes the migration idempotent — safe to re-apply if a previous run was interrupted; (c) the down() function cleanly drops the column if you need to roll back to 1.2.10 or earlier; (d) the migration runner self-bootstraps its tracking table (schema_migrations), so customers upgrading from pre-1.2.3 versions that never had the migration system don't need to do anything special — just point docker-compose at the 1.2.11 image and restart. Verify with: `docker compose logs app | grep 'Migration 002 applied successfully'` (should appear once on first startup after the upgrade)."
+      ]
+    },
+    {
+      "version": "1.2.10",
+      "date": "2026-05-23",
+      "summary": [
+        "Readable titles for single-alarm incidents",
+        "Backfill catches up in minutes, not days",
+        "GPU stays cool when the app is idle",
+        "No action required"
+      ],
+      "highlights": [
+        "Incident title generation: singleton incidents (one alarm) no longer call the LLM — the alarm rule name IS the title. Previously, every singleton incident created by the alarm_sync and drilldown_backfill workers triggered an LLM title-generation call. About 25% of these failed silently with the 9B model returning an empty response after a long <think> block — the model would reason its way to 'no attack pattern to title' for small/simple prompts, exhaust the 16K-token budget on thinking, then emit EOS with no answer. The empty-response retry path (retry at 32K → no-think fallback → error) burned ~5-7 minutes of GPU per failed singleton and produced the generic 'Security Incident - 1 Related Alarms' fallback anyway. The fix: bypass the LLM for singletons entirely (rule name is descriptive enough on its own) and only call the LLM for multi-alarm incidents where cross-rule synthesis is genuinely useful. Customers with active SIEMs running heavy alarm volume will see backfill catch-up time drop from days to minutes, GPU stay cool when the app is idle, and singleton incident titles become more readable (e.g., 'Lateral: Account Added to Admin Group' instead of 'Security Incident - 1 Related Alarms'). Multi-alarm incident titles are unchanged — they still get the rich LLM-synthesized titles describing the attack pattern across stitched alarms.",
+        "Incident title generation: defensive guard against oversize LLM prompts. If aggregated incident context exceeds 100,000 characters (roughly 25K tokens, leaving headroom for thinking and answer in the 9B model's 32K context window), the LLM call is skipped and a generic title is used. The aggregation helper normally produces output well below this threshold (3 alarms per rule × 5 deduplicated logs per alarm × 5 fields per log), but the guard prevents catastrophic GPU burn if any of those caps get bumped up in the future or if drilldown payloads are unusually large. An INFO-level log line records when the guard trips, so ops can correlate to specific incidents."
+      ]
+    },
+    {
+      "version": "1.2.9",
+      "date": "2026-05-22",
+      "summary": [
+        "Incident titles and rule classifications now populate",
+        "Incident grouping no longer fails under load",
+        "Far fewer threat-intel warnings in the logs",
+        "Compose file update required — recreate Neo4j container"
+      ],
+      "highlights": [
+        "Worker LLM calls: bumped num_predict from 4096 to 16384 on the per-rule worker paths that were hitting empty-response retry storms — drilldown_backfill's incident-title generation (incident_service.py), insights_worker's TDIR classification, and insights_worker's rule quality assessment (both in rhythm_insights_service.py). Previously each rule would trigger 3 LLM calls (initial 4K → retry 8K → no-think fallback) because the model exhausted the budget on its <think> block before writing the answer; now most rules complete on the first call. Customers running heavy alarm-sync batches will see worker GPU time drop ~3x and incident titles/classifications actually populated instead of falling back to no-think generic output. Same pattern as the Coverage Analysis and MITRE classify budget fixes in 1.2.5/1.2.6/1.2.7.",
+        "Neo4j memory limits raised: server heap max bumped from 2G to 4G, and per-transaction memory limit set explicitly to 3G in docker-compose. The implicit default (~70% of heap = 1.4G) was being exceeded by the alarm-cluster Cypher query in incident_service.py when many correlated alarms arrived in a single alarm_sync cycle, surfacing as Neo.TransientError.General.MemoryPoolOutOfMemoryError errors in app logs and breaking incident grouping. Customers with 32GB+ system RAM (RhythmAI's minimum) easily accommodate the larger Neo4j footprint.",
+        "AbuseIPDB threat-intelligence noise eliminated. The IP reputation check now filters to public/globally-routable IPs FIRST and returns silently when an alarm contains only internal IPs (10.x, 172.16-31.x, 192.168.x — the common case in enterprise networks). Previously every alarm investigation logged two WARNING lines (\"Could not load AbuseIPDB API key from secrets database\" + \"AbuseIPDB API key not configured\") regardless of whether there were any public IPs to look up. When the API key IS missing but public IPs are present, a single informative warning fires per investigation with the count of skipped IPs, so ops can correlate to specific alarms. Loading the API key on success is now logged at DEBUG instead of INFO. Net: ~95% fewer threat-intel log lines for customers who don't use AbuseIPDB."
+      ]
+    },
+    {
+      "version": "1.2.8",
+      "date": "2026-05-21",
+      "summary": [
+        "Live progress for MITRE classification runs",
+        "Stop and resume classification without losing work",
+        "Investigate an alarm straight from chat",
+        "No action required"
+      ],
+      "highlights": [
+        "Rhythm Insights MITRE classification: real-time progress UI. While LLM Classify (or Apply TDIR Defaults) is running, a blue progress panel under the buttons shows 'X / Y rules (Z%)' with a live progress bar and mapped/error counts. Updates every 3 seconds. Replaces the previous spinner-only feedback that gave customers no sense of how far through a long classification run they were.",
+        "Rhythm Insights MITRE classification: state survives navigation away from the MITRE page. Click into Coverage Matrix or another tab mid-classify and the spinner + progress bar restore correctly when you come back. Previously the spinner state was lost on navigation, making it look like classification had stopped when it was still running.",
+        "Rhythm Insights MITRE classification: Stop button. Cancel a running LLM Classify to free the GPU for other RhythmAI workloads (alarm investigations, AI Assistant queries). The 1–2 rules currently mid-LLM-call finish naturally (Ollama doesn't support clean mid-generation cancellation), then the run pauses and saves the list of already-processed rule IDs in memory.",
+        "Rhythm Insights MITRE classification: Resume from where you stopped. After cancelling a force-reclassify run, an amber 'Paused — N / M rules' panel appears with a 'Resume from N/M' button. Clicking Resume continues the classification, skipping already-processed rule IDs so you don't re-do prior work. A 'Start over' button is also offered if you'd rather throw away progress and begin fresh. Caveat: pause state lives in memory and is lost on app container restart (persistent state is planned for a future release).",
+        "Rhythm Insights MITRE classification: insights worker no longer interferes with running LLM classifications. Previously the periodic background TDIR-defaults sweep (every ~5 min) would overwrite the LLM run's progress numbers in the shared status tracker, causing the UI to falsely report 'complete' mid-run and auto-refresh the heatmap. The worker now runs untracked and the tracker also defensively refuses to be overwritten while a run is in progress.",
+        "Rhythm Insights MITRE classification: donut chart math fix. The Priority Techniques donut at 100% coverage now renders as a complete green ring instead of an ~75% partial arc. The SVG dashoffset interaction that caused this has been replaced with a transform rotation that works correctly at all percentages.",
+        "Rhythm Insights MITRE classification: per-button spinner state. Each classify button (Apply TDIR Defaults and LLM Classify) now shows its spinner only when that specific button initiated the run. Previously both buttons would show as 'busy' when either was running, and the spinner icon always sat on the TDIR button regardless of which action triggered the work — making it look like TDIR was running when LLM Classify was actually in progress.",
+        "AI Assistant chat: type 'investigate alarm <ID>' to run a full alarm investigation directly from the chat. Same workflow as right-click → 'Investigate with AI' in the LogRhythm Web Console, but triggered by chat. Recognizes phrasings like 'investigate alarm 642766', 'analyze alarm #642766', 'look at alarm 642766', 'check this alarm 642766'. Alarm must already be synced into RhythmAI from LogRhythm; non-existent IDs return a friendly 'alarm not found' message in the chat. Numeric IDs require 3+ digits to avoid matching small numbers in unrelated sentences."
+      ]
+    },
+    {
+      "version": "1.2.7",
+      "date": "2026-05-09",
+      "summary": [
+        "MITRE classifier now sees the full catalog",
+        "Force re-classify already-mapped rules",
+        "Faster, more reliable classification runs",
+        "Re-run MITRE classification to pick up missed techniques"
+      ],
+      "highlights": [
+        "Rhythm Insights MITRE classification: the LLM classifier was previously shown only the first 100 of ~196 ATT&CK Enterprise techniques, making roughly half the catalog (Discovery, Lateral Movement, Collection, Command & Control, Exfiltration, Impact tactics) structurally invisible. The cap is now raised to 300, with a warning log if the catalog ever exceeds it. Customers should re-run MITRE classification (Rhythm Insights → MITRE card → 'LLM Classify') to surface previously-missed techniques.",
+        "Rhythm Insights MITRE classification: new 'Force re-classify already-mapped rules' checkbox under the LLM Classify button. By default, the LLM only classifies rules without existing mappings. Force re-classify runs on every TDIR-classified rule, so customers can take advantage of the technique-cap fix above (or any future model upgrade) without manually deleting database rows. Confirmation dialog warns about LLM cost before running.",
+        "Rhythm Insights MITRE classification: bumped LLM generation budget from 4096 to 16384 tokens for the per-rule classification call. The previous 4K ceiling caused the 9B model to exhaust budget inside its reasoning block while reading the full technique catalog, producing unparseable empty responses. Same pattern as the Coverage Analysis budget bumps in 1.2.5/1.2.6.",
+        "Rhythm Insights MITRE classification: classifier now processes rules concurrently (default 2 in flight, matching OLLAMA_NUM_PARALLEL=2) instead of one-at-a-time. Tunable via MITRE_LLM_CONCURRENCY env var. Force re-classify on a 250-rule SIEM completes meaningfully faster — measured ~30% reduction in wall-clock vs the previous sequential loop on a single GPU.",
+        "Rhythm Insights MITRE classification: when the LLM returns an empty response for a rule (~3% sampling-variance edge case, distinct from budget exhaustion), the classifier now retries the call once before giving up. Recovers most previously-skipped rules at the cost of one extra LLM call.",
+        "Rhythm Insights MITRE classification: parse failures now log a diagnostic line capturing raw response length, presence of <think> open/close tags, and the head/tail of the response. Helps distinguish budget exhaustion from empty completions or malformed JSON in customer environments without needing to enable model-level tracing."
+      ]
+    },
+    {
+      "version": "1.2.6",
+      "date": "2026-04-29",
+      "summary": [
+        "Health Check treats MCP as optional",
+        "New check for the RhythmAI model version",
+        "Fixed stray think tags in chat answers",
+        "No action required"
+      ],
+      "highlights": [
+        "Health Check: MCP (n8n) is now correctly treated as optional. If you haven't configured the MCP SSE endpoint via Settings → MCP, the system shows 'Not configured (optional)' and the overall status stays Healthy instead of Partial Degradation. Configured-but-unreachable MCP still shows as a real issue.",
+        "Health Check: new 'RhythmAI Model' check that compares the running RhythmAI:9b manifest digest against the latest on Ollama Hub (imetaexabeam/RhythmAI:9b). Shows the same 12-character ID `ollama list` displays, so customers can verify they're running the latest fine-tuned model. Outdated builds are flagged as Degraded (informational, doesn't block use).",
+        "Rhythm Insights AI Assistant: bumped Coverage Analysis num_predict from 16384 → 24576 to handle the heaviest compliance/severity prompts. The previous 16K ceiling could be hit on the largest customer environments, causing the model to exhaust its budget inside the reasoning block and fall back to a no-think retry.",
+        "Fixed: literal '<think>' tags occasionally leaked through to the chat when the no-think fallback fired. invoke_no_think now defensively strips any <think>...</think> blocks (including unclosed ones) from its response, mirroring the existing pattern used in invoke(). No quality impact — purely sanitises the output.",
+        "Apps page: 'RhythmAI Assistant' and 'RhythmSOAR' tiles can be hidden via two boolean flags in src/components/Home.tsx without removing RBAC permissions. Underlying routes and the Chrome extension's right-click 'Investigate Alarm with AI' continue to work normally."
+      ]
+    },
+    {
+      "version": "1.2.5",
+      "date": "2026-04-28",
+      "summary": [
+        "Background work no longer blocks your queries",
+        "Retired log sources excluded from coverage scores",
+        "Ask about alarm volume by severity",
+        "No action required"
+      ],
+      "highlights": [
+        "Performance: OLLAMA_NUM_PARALLEL=2 — background workers (sync, drilldown backfill, insights) no longer queue user-triggered alarm investigations and AI Assistant queries on the same Ollama slot. Concurrent throughput roughly doubles on customer 32GB GPUs at no quality cost.",
+        "Coverage Analysis quality: bumped LLM generation budget from 4096 to 16384 tokens for Rhythm Insights AI Assistant. Heavy compliance-gap and rule-list questions previously exhausted budget inside the model's reasoning block and fell through to a no-think fallback (zero reasoning); now they complete with full senior-analyst reasoning intact.",
+        "Coverage Analysis observability: when the no-think fallback does fire, backend now logs token counts, prompt size, and think-block samples to help diagnose the rare remaining cases.",
+        "Rhythm Insights — Retired log sources fix: Log Source Coverage Score, TDIR coverage, AI Assistant context, and executive summary no longer count log sources marked Retired in LogRhythm SIEM. Was using the wrong API field (status='Enabled' config flag) instead of recordStatus='Active'/'Retired' admin state. Cylance and any other retired source now correctly excluded from scoring after the next sync.",
+        "Rhythm Insights AI Assistant — alarm severity awareness: new context section provides alarm counts grouped by LogRhythm Risk Based Priority (Critical RBP≥90, High 70-89, Medium 50-69, Low <50) across today / last 24h / last 7d / last 90d. Answers questions like \"how many critical alarms today\" or \"alarm volume by severity this week\" with exact numbers from the SIEM.",
+        "Rhythm Insights AI Assistant — suggested prompts now lead with the new severity question and the follow-up prompt library includes severity / RBP / time-window phrasings."
+      ]
+    },
+    {
+      "version": "1.2.4",
+      "date": "2026-04-22",
+      "summary": [
+        "Expired sessions now show a clear error",
+        "Investigations no longer complete with no output",
+        "No action required"
+      ],
+      "highlights": [
+        "Fixed: Alarm investigations and other API calls silently appearing to 'complete' without generating output when the auth token was expired or missing. Backend exception handler now returns proper JSON 401 for API requests instead of serving the SPA HTML page. Browser URL-bar navigation to SPA routes is unaffected."
+      ]
+    },
+    {
+      "version": "1.2.3",
+      "date": "2026-04-12",
+      "summary": [
+        "Outcomes Navigator is now Rhythm Insights",
+        "Security hardening across APIs and logins",
+        "Old links and permissions keep working",
+        "No action required"
+      ],
+      "highlights": [
+        "Rhythm Insights: renamed from Outcomes Navigator. Existing data migrates automatically on upgrade — zero data loss.",
+        "Security: Backend RBAC enforcement on all Rhythm Insights API endpoints (not just frontend gating).",
+        "Security: Rate limiting on login endpoint (5 attempts per minute per IP) to prevent brute-force attacks.",
+        "Security: Production error responses no longer leak stack traces, file paths, or connection strings.",
+        "Security: SIEM SQL queries now use parameterized queries instead of string interpolation.",
+        "Security: App requires ENCRYPTION_KEY in .env (no more auto-generated ephemeral keys that break on restart).",
+        "Database: Formal migration system with tracked, ordered, idempotent migrations. Future schema changes are safe and repeatable.",
+        "Permissions: Old 'access_outcomes_navigator' permission key automatically works alongside new 'access_rhythm_insights' — no admin action needed.",
+        "Permissions: Rhythm Insights permission now visible in role creation/edit UI.",
+        "Quality: Replaced 50 deprecated Python API calls (datetime.utcnow, asyncio.get_event_loop).",
+        "Quality: Deleted 3,000+ lines of dead code.",
+        "Quality: Service dependency injection now uses singletons (reduced per-request object creation).",
+        "Quality: TLS certificate verification is now configurable via ca_bundle_path in config.json.",
+        "Backward compatible: /api/outcomes-navigator/* API calls and /outcomes-navigator bookmarks still work via automatic redirects."
+      ]
+    },
+    {
+      "version": "1.2.2",
+      "date": "2026-04-07",
+      "summary": [
+        "New CPU-only mode for deployments without a GPU",
+        "Attack graph buttons now appear reliably",
+        "Regex Builder still needs a GPU",
+        "No action required"
+      ],
+      "highlights": [
+        "CPU-Only Mode: run RhythmAI without a GPU using a small CPU-optimized language model. Toggle from Settings → AI Assistant. Visible CPU MODE badge appears in the header when active.",
+        "CPU model is configurable — point it at any local Ollama model (gemma3n:e2b, qwen2.5:3b, llama3.2:1b, etc.). Default is gemma3n:e2b which auto-downloads on first enable.",
+        "Confirmation modal explains the trade-offs before enabling CPU mode (slower performance for AI Assistant, Regex Builder unavailable).",
+        "Fixed: View Attack Graph and View Related Alarms buttons sometimes did not appear after alarm investigations completed. Root cause was an SSE parser that dropped large correlation payloads when split across TCP chunks.",
+        "Note: Regex Builder is not available in CPU mode — it requires a larger model that needs GPU acceleration."
+      ]
+    },
+    {
+      "version": "1.2.1",
+      "date": "2026-03-15",
+      "summary": [
+        "Live progress for recalculation runs",
+        "Custom rules matched to compliance frameworks",
+        "Clearer MITRE heatmap in both themes",
+        "No action required"
+      ],
+      "highlights": [
+        "Master recalculation dashboard with live step-by-step progress tracking",
+        "Compliance cross-referencing: custom AIE rules matched against CCF compliance rules via detection fingerprint scoring",
+        "Recalculation run history persisted to database with sync point tracking",
+        "MITRE ATT&CK heatmap color scheme overhaul for dark and light themes",
+        "Executive summary and LLM outputs now strip reasoning model think tags",
+        "Background worker sync timestamps survive container restarts",
+        "Rule quality progress bar turns green at 100%"
+      ]
+    },
+    {
+      "version": "1.2.0",
+      "date": "2026-03-04",
+      "summary": [
+        "First public release of RhythmAI",
+        "AI alarm investigation, threat graph, regex builder",
+        "Coverage matrix, MITRE heatmap, Chrome extension",
+        "No action required"
+      ],
+      "highlights": [
+        "Initial public release of RhythmAI platform",
+        "AI-powered alarm investigation with streaming responses",
+        "Threat graph visualization with Neo4j",
+        "Regex builder with RAG-powered generation",
+        "Rhythm Insights with TDIR coverage matrix and MITRE ATT&CK heatmap",
+        "Multi-factor composite scoring with LLM quality assessment",
+        "Executive summary generation for CISO reporting",
+        "Chrome extension sidebar for LogRhythm Web Console"
+      ]
+    }
+  ]
+}
