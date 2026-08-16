@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "version": "1.2.28",
+      "date": "2026-08-17",
+      "appOnly": true,
+      "servicesChanged": ["app"],
+      "summary": [
+        "Accurate cross-pull counts on the graph canvas",
+        "Release notes now reach every install",
+        "Update script waits properly on slow first boots",
+        "No action required"
+      ],
+      "highlights": [
+        "Honest counts when pulls overlap. In the Threat Universe, a host, user or IP that appears in SEVERAL pulls' activity used to display the SUM of each pull's count — but pulls in one investigation typically capture the same underlying log events from different angles, so the sum double-counted shared events (a real case: two IP pulls each saw the same 168 events and the canvas printed ×336, a number that exists nowhere in the SIEM). Satellites now reconcile across pulls: when every contributing pull stored its complete log set, the label shows the exact deduplicated event count ('×168 · 2 pulls'); when exactness is impossible (older cached pulls, very large pulls), it shows the strongest single pull's count as an honest floor ('×168+ · 2 pulls') — never a fabricated total. The AI assistant's per-artifact answers were always deduplicated correctly; the canvas now agrees with it. Pulls cached before 1.2.26 lack the per-log identity fields needed for exact reconciliation and use the floor until refreshed.",
+        "Release notes and one-click eligibility for NEWER versions now reach every install. The update check previously tried to fetch release metadata from a location that has been inaccessible since day one, silently falling back to the release notes bundled inside your installed image — which by definition never describe versions newer than yours. Metadata now lives at a public channel (github.com/imeta-exabeam/rhythmai-releases) that is updated with every release, so the Update Available card can show you what a new version contains BEFORE you install it, and the Upgrade-now button can verify eligibility without workarounds.",
+        "Update script polish from the first customer-site run. The health wait at the end of the update scripts polls the app container's own Docker healthcheck instead of probing HTTPS from the host (same signal Docker itself uses; immune to host-side TLS quirks), and allows five minutes instead of two — a first boot after a multi-release jump runs configuration merge, schema migrations and seeding, which legitimately outlasted the old deadline on customer hardware while the upgrade itself had succeeded.",
+        "No database migration and no compose change from 1.2.27. App-image-only: if you are on 1.2.27 with the updater sidecar, Settings → About → Upgrade now applies it (note: the 1.2.27 update check reads only its bundled metadata, so if the button does not light up, run the update script once more — from 1.2.28 onward the public channel makes the button reliable). The Ollama pin (0.20.6), RhythmAI:9b model, prompts and context budgets are unchanged."
+      ]
+    },
+    {
       "version": "1.2.27",
       "date": "2026-08-16",
       "appOnly": true,
