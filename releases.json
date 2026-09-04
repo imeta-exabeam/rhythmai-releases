@@ -1,6 +1,27 @@
 {
   "releases": [
     {
+      "version": "1.3.1",
+      "date": "2026-09-05",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Investigation reports say what they are doing during the one pause analysts notice (\"Checking anomalies…\")",
+        "Update script: stalled model downloads are detected by rate, with percent and speed on every progress line, and the Windows script's damaged-download check now actually runs",
+        "Quieter, truer boot log after an upgrade: the model check re-probes instead of warning too early, and the migration-revision notice is reconciled once",
+        "App-only release: one click from Settings > About on 1.3.0. Customers on older versions run the update script once and land here directly, including the 27B model step from 1.3.0."
+      ],
+      "highlights": [
+        "Checking anomalies. The 27B writes a few sentences under the Threat Analysis table that the report deliberately does not show, and while it writes them the screen used to sit still for several seconds before the Anomalies section appeared. During exactly that gap the report now shows a small pulsing \"Checking anomalies…\" label at the end of the text, so the pause reads as work in progress rather than a stall. Every other section streams as before; the label appears only where the pause is.",
+        "Model download watchdog measures rate, not silence. On the 1.3.0 update a 19.5 GB model download crawled at a few megabytes a minute after the content network dropped one part, and the previous watchdog, which only reacted to a download that had stopped completely, never fired. Both update scripts now judge progress by bytes gained over the last six minutes and restart the Ollama runtime when that falls below 64 MB, resuming from the parts already on disk. Progress lines show the total, the percentage and the current speed, and a restart is announced in plain language with what is kept.",
+        "Windows updater: the damaged-download safety net now runs. The check that discards a corrupt partial download before resuming was handed to the container through a quoting path that Windows PowerShell 5.1 mangles, so on Windows it silently never ran. It is now delivered intact on PowerShell 5.1 and 7, verified against a throwaway container. The Linux script was unaffected.",
+        "Boot log after an upgrade. The update recreates the app before it installs the new model, so the first boot used to warn that the model was missing and never said when it arrived. The app now notes that the model is not present yet and re-checks for up to an hour, logging once when it is installed; the warning is kept only for the case where it never appears. A one-time notice about migration 002 having been revised since it was applied is now reconciled once instead of repeated on every boot.",
+        "Upgrade note. This is an app-only release: on 1.3.0 use Settings > About > Upgrade now. From any earlier version run the update script once; it carries the 1.3.0 runtime and model changes and finishes on 1.3.1 in the same run. Refresh the script from the image when it tells you to."
+      ]
+    },
+    {
       "version": "1.3.0",
       "date": "2026-09-03",
       "appOnly": false,
