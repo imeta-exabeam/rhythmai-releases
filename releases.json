@@ -1,6 +1,48 @@
 {
   "releases": [
     {
+      "version": "1.3.0",
+      "date": "2026-09-03",
+      "appOnly": false,
+      "servicesChanged": [
+        "app",
+        "ollama"
+      ],
+      "models": {
+        "pull": [
+          "imetaexabeam/rhythmai:27b"
+        ],
+        "alias": {
+          "imetaexabeam/rhythmai:27b": "RhythmAI:27b"
+        },
+        "remove": [
+          "RhythmAI:9b",
+          "imetaexabeam/rhythmai:9b",
+          "qwen2.5-coder:32b"
+        ],
+        "keep": [
+          "all-minilm:l6-v2"
+        ],
+        "minOllamaVersion": "0.32.14",
+        "sizeGb": 19.5
+      },
+      "summary": [
+        "New RhythmAI 27B model — one model now answers investigations AND writes regex",
+        "Compliance matching rebuilt on LogRhythm's own rule definitions and pack rosters",
+        "Ollama runtime moves from 0.20.6 to 0.32.14 (compose change)",
+        "Not a one-click release: run the update script, accept the docker-compose.yml replacement, and allow time for a ~19.5 GB model download"
+      ],
+      "highlights": [
+        "One model, two jobs — RhythmAI 27B. Investigations, the AI Assistant, coverage and compliance analysis and the Regex Builder now all run on a single fine-tuned model, RhythmAI:27b. It replaces both the 9B that answered chat and the separate qwen2.5-coder:32b that wrote regex — one model to keep resident, one set of prompts, one thing to upgrade. On the standard security batteries it scores CyberMetric-500 93.8% (the 9B scored 83.6%), CTIBench threat-intelligence multiple-choice 72.0% — GPT-4 level on that battery — and SecEval 74.8%. On our own regex battery it writes a correct pattern 84.6% of the time against the retired coder model's 38.5%, which is what made the consolidation possible rather than merely convenient. Reasoning stays baked into the fine-tuned weights: short or absent think blocks are the intended behavior, not degradation.",
+        "Ollama runtime moves to 0.32.14. The 27B needs a newer inference runtime than the 9B did, so the shipped compose moves the pin from ollama/ollama:0.20.6 to ollama/ollama:0.32.14 and adds two settings a model this size needs. OLLAMA_KEEP_ALIVE=-1 keeps it resident — Ollama's default unloads an idle model after five minutes, which would turn the first question of every morning into a multi-minute cold load. OLLAMA_LOAD_TIMEOUT=15m gives a ~20 GB load from a slow disk room to finish instead of failing the request outright. Both pins stay explicit — never 'latest'. Because this release changes a service other than the app, it is NOT eligible for the one-click upgrade in Settings > About; see the upgrade note below.",
+        "Compliance matching now reads LogRhythm's own rule definitions. Framework coverage used to be inferred from rule names and drilldown text, which credited rules that merely sounded relevant and missed rules doing the work under a different name. It now matches in three layers: your LogRhythm Knowledge Base's compliance pack rosters (authoritative — the console's own answer to which rules belong to a pack, and it credits the rules that belong to several packs at once), definition fingerprints built from each AIE rule's actual field logic, and the old drilldown-text match only as a last resort. Results are reported in two tiers instead of one number: STRONG matches (the rule's strongest specified component and its name lineage both agree, and the rule's shape fits) and CANDIDATE matches (plausible, listed separately, never silently counted toward your score). A new card calls out rules that are PRESENT in your deployment but DISABLED — the most common reason a framework scores lower than expected — and rule filters now show rule names throughout instead of numeric rule IDs.",
+        "Compliance expected-rule lists now come from your LogRhythm KB packs. For every framework the assessment finds the matching KB module on your SIEM and uses its rule roster as the expected list when the pack is installed; our reference lists remain the fallback. Frameworks whose pack is not installed are now shown as \"rule pack not installed\" instead of as rules to write. Coverage percentages can change on the first assessment after this upgrade because the denominators now match the vendor packs (for example CIS Controls and NCSC CAF); the tab states which list each framework uses.",
+        "27B integration fixes from field testing. Five issues surfaced by running the new model against real customer data, all fixed: a repeat penalty carried over from the 9B era corrupted entity names in long reports (hostnames and usernames came back subtly misspelled) and is now neutral for this model; the Regex Builder could loop on very long CSV log lines and now caps its output; alarm drilldown was dropping the 'group' field on its way to the model, so group membership (a user being in Domain Admins, for instance) was invisible in reports that should have cited it; the drilldown backfill worker logged 'Queued N' where N counted rows it had merely CHECKED rather than queued, and now reports the measured outcome; and report headers came back in Arabic when the source log contained Arabic text.",
+        "Regex Builder examples for Palo Alto and long CSV logs. The Regex Builder retrieves similar worked examples before it drafts a pattern, and that corpus contained no Palo Alto seeds at all — one of the most common firewall log formats in the field — and nothing long enough to teach it how wide comma-separated logs are structured. Both are now seeded, which is what first-attempt quality on those formats depends on. Regex Builder examples now persist across upgrades and are seeded automatically at startup: the vector store moved onto its own Docker volume, so it is no longer wiped every time the app container is recreated.",
+        "Upgrade note: this release changes the compose file AND downloads a new model, so it is not a one-click upgrade. Run Update-RhythmAI.ps1 (Windows) or update-rhythmai.sh (Linux), and ANSWER YES when it offers to replace your docker-compose.yml — that replacement carries the Ollama runtime change, and declining it leaves the new model unable to run. The script then downloads RhythmAI:27b, about 19.5 GB: allow time (30–90 minutes is normal, longer on a slow link) and keep roughly 20 GB free on the Docker volume for the duration of the swap. Only once the new model is verified in place does the script remove the ones it supersedes (RhythmAI:9b and the qwen2.5-coder:32b regex model), so the net disk change is about -6 GB; the embedding model all-minilm:l6-v2 is kept. If the download fails, nothing is removed and your existing models keep working — re-run the script, or use Settings > AI Assistant > Download in the app. The GPU requirement is unchanged: 32 GB VRAM minimum."
+      ]
+    },
+    {
       "version": "1.2.29",
       "date": "2026-08-19",
       "appOnly": true,
