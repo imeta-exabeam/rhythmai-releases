@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.3.3",
+      "date": "2026-09-05",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Series of events: an arrow written inside a step no longer splits it into broken halves",
+        "App-only release: one click from Settings > About on 1.3.x; older versions run the update script once and land here directly"
+      ],
+      "highlights": [
+        "Series of events keeps steps whole. The model sometimes writes a connection inside one step, such as \"HTTP PUT 192.0.2.13 → 203.0.113.10:80\", and the chain splitter cut on that inner arrow, leaving two broken chips with stray brackets and a technique chip on a fragment. Bracketed steps are now read as whole units: an arrow inside a step is text, and only the arrows between steps separate them. Chains without brackets behave exactly as before.",
+        "Upgrade note. App-only: on 1.3.0 to 1.3.2 use Settings > About > Upgrade now. From any earlier version run the update script once; it carries the 1.3.0 runtime and model changes and finishes on 1.3.3 in the same run."
+      ]
+    },
+    {
       "version": "1.3.2",
       "date": "2026-09-05",
       "appOnly": true,
