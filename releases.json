@@ -1,6 +1,30 @@
 {
   "releases": [
     {
+      "version": "1.4.0",
+      "date": "2026-09-14",
+      "appOnly": false,
+      "servicesChanged": [
+        "app",
+        "vllm",
+        "model-seed"
+      ],
+      "summary": [
+        "An optional second AI engine for 32 GB Ada-class cards — roughly twice the tokens per second, on an 8-bit artifact, chosen in Settings",
+        "The engine's weights arrive as a Docker Hub image and are unpacked into a volume by compose, with every file checked against the image's own manifest",
+        "Guardrails, the outbound n8n MCP tools mode and the Assistant's Think toggle are removed, and your saved configuration is migrated for you",
+        "Not a one-click release: run the update script and accept the docker-compose.yml replacement. It adds two services that stay dormant — the new engine starts only if you ask for it, and nothing about a standard install changes."
+      ],
+      "highlights": [
+        "A second engine, for the boxes that can use it. RhythmAI has only ever spoken to Ollama. 1.4 adds an optional engine built on vLLM that serves an 8-bit AWQ build of the same RhythmAI 27B model, for customers whose GPU is an Ada-class 32 GB card. On the gated box it answered at a median 107.6 tokens per second against Ollama's 56.1 on the same prompts — the difference between reading an investigation as it is written and waiting for it. The artifact occupies 21.5 GiB on the card and leaves room for a 64k context window with an fp8 KV cache, which is what the shipped command line asks for. This is an addition, not a replacement: the Ollama path is byte-for-byte what it was, it stays the default on every install, and Ollama remains in every deployment because it also serves the embeddings the Regex Builder needs.",
+        "You choose the engine in Settings. Settings > AI Assistant carries an engine selector and a card for the engine that is active, with its endpoint, its model name and what the app's own probe found when it last checked. Switching engines is a saved setting, not a rebuild — the app reads it, checks that the engine answers, and reports what it found. Like every other LLM setting, the change takes effect after the app container restarts. If the engine is unreachable the card says so in plain language instead of failing a question later.",
+        "The model travels like everything else: as an image. The engine's weights are published as a private Docker Hub image and installed by a one-shot `model-seed` service that fills a named volume and exits; the engine mounts that volume read-only and starts only after the seed has finished. The image carries a manifest of every file's size and checksum, and the seed writes its completion marker only once each unpacked file matches, so an interrupted or corrupted seed simply starts over and the engine is never handed a half-written model. Updating the model is a tag bump: the seed refills the volume and the engine is recreated onto the new weights. There is no second set of credentials, no hand-placed folder and no separate download channel — one `docker login`, then `docker compose --profile vllm up -d`. `docker save` still covers an air-gapped box. Keep the model image after seeding: it is what refills the volume without a pull if the volume is ever lost. Full instructions, including the offline path and the disk it needs, are in deploy/model-image/README.md inside the release.",
+        "Three features leave the product. Guardrails, the second-model check on AI Assistant chat, is removed: it needed its own ~20 GB safeguard model beside the 27B, which a single 32 GB card cannot hold, so it shipped disabled and stayed disabled. The outbound n8n MCP tools mode is removed: n8n left the shipped stack in May 2026, so the toggle in the Assistant toolbar had no server to reach and produced a confusing failure instead of an answer. The Assistant's Think toggle is removed: it set a flag no backend code ever read, because reasoning is baked into the model's weights. The inbound LogRhythm skill store is a different feature and is untouched. Your saved configuration is migrated on first boot: the three retired sections are dropped from the stored document, so a support bundle no longer shows a feature that is not there. Nothing else in your settings is touched.",
+        "Builds are reproducible again. The image pins its entire Python dependency set to the versions that shipped in 1.3.3, in a constraints file checked in beside the requirements. This also repaired the build outright: a new release of one transitive library had started to win over the copy that comes with the base operating system, and that copy cannot be replaced, so every image build had been failing at the dependency step. Nothing in the running product changes — the image now contains the versions it was tested with, and a rebuild of the same commit produces the same image.",
+        "Upgrade note. This release changes services other than the app, so it is not eligible for the one-click upgrade in Settings > About: run the update script once and accept the docker-compose.yml replacement when it offers it. The new compose defines two extra services, `vllm` and `model-seed`, behind a profile. On a standard install that profile is off, both services stay dormant, and your stack starts exactly as it did on 1.3.3 — the update touches the app and nothing else. The new engine is opt-in and is a deliberate piece of work: a Docker Hub login for the model image, `--profile vllm` on your compose commands, the engine selected in Settings, and an app restart. Read deploy/model-image/README.md before you start; it lists the GPU, the disk and the steps in order."
+      ]
+    },
+    {
       "version": "1.3.3",
       "date": "2026-09-05",
       "appOnly": true,
