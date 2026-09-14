@@ -1,6 +1,25 @@
 {
   "releases": [
     {
+      "version": "1.4.1",
+      "date": "2026-09-15",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "1.4.0 is withdrawn: its app image does not start, because a dependency the form-handling routes need was missing. 1.4.1 is the release to install.",
+        "No feature changes from 1.4.0 - everything that release described is here, in an image that boots",
+        "A new release gate now imports every module and builds the application inside the image before it can be published",
+        "App-only release: one click from Settings > About on 1.4.0. From 1.3.x run the update script once; it carries the 1.4.0 compose change and lands you here in the same run."
+      ],
+      "highlights": [
+        "What happened. The 1.4.0 app image cannot start. Removing the outbound n8n MCP tools mode took two packages out of the dependency list, and python-multipart - the parser FastAPI uses for file uploads - had only ever been installed because those packages happened to pull it in. FastAPI checks for it at the moment a route that accepts an uploaded file is declared, which happens while the application is being built, so the container failed at startup and restarted in a loop rather than failing some later request. Two routes declare such an upload: training the Regex Builder's example store, and the insights import. The package is now named in its own right, where removing something else cannot take it away again. Nothing else about the release changed: 1.4.1 is 1.4.0 plus that one dependency and the gate below. If you installed 1.4.0, move to 1.4.1; if you have not, install 1.4.1 directly.",
+        "A release gate that starts the thing before we ship it. The reason this reached you is worth saying plainly: every check the release process had reads a FILE out of the image - the version, the update script, the release notes - and a file reads perfectly well inside an image that cannot boot. The unit tests all passed, on machines that happened to have the missing package. There is now a gate that runs against the built image itself: it imports every module the product ships, inside the container, on the same paths the app uses; it builds the application object there and requires the expected set of endpoints to be present, the upload route among them; and it prints the full list of packages that changed since the previous release, so a dependency that quietly disappears is seen at cut time rather than at yours. It is part of the checklist from now on, and no image ships without it passing.",
+        "Upgrade note. This is an app-only release. On 1.4.0 use Settings > About > Upgrade now - it replaces the app container and nothing else. From 1.3.x, run the update script once: it carries the 1.4.0 compose change (the two profile-gated services for the optional engine, dormant unless you enable them) and finishes on 1.4.1 in the same run. The optional vLLM engine is unchanged from what 1.4.0 described and is still opt-in; see deploy/model-image/README.md in the release."
+      ]
+    },
+    {
       "version": "1.4.0",
       "date": "2026-09-14",
       "appOnly": false,
@@ -10,7 +29,7 @@
         "model-seed"
       ],
       "summary": [
-        "An optional second AI engine for 32 GB Ada-class cards — roughly twice the tokens per second, on an 8-bit artifact, chosen in Settings",
+        "Withdrawn - the image does not start; install 1.4.1. An optional second AI engine for 32 GB Ada-class cards — roughly twice the tokens per second, on an 8-bit artifact, chosen in Settings",
         "The engine's weights arrive as a Docker Hub image and are unpacked into a volume by compose, with every file checked against the image's own manifest",
         "Guardrails, the outbound n8n MCP tools mode and the Assistant's Think toggle are removed, and your saved configuration is migrated for you",
         "Not a one-click release: run the update script and accept the docker-compose.yml replacement. It adds two services that stay dormant — the new engine starts only if you ask for it, and nothing about a standard install changes."
