@@ -1,6 +1,23 @@
 {
   "releases": [
     {
+      "version": "1.4.7",
+      "date": "2026-09-16",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The vLLM engine card now looks and behaves like the Ollama card: the same field order and the same context-window sliders, bounded by the window the engine was started with",
+        "One-click eligible from Settings > About; nothing in the stored configuration changes."
+      ],
+      "highlights": [
+        "Settings > LLM: the OpenAI-Compatible Engine card follows the Ollama card's order - endpoint, model, context window, regex model, regex context window, then the API key - and both windows are sliders with a number box, as on the Ollama card.",
+        "On the vLLM tier the sliders stop at the window the engine was started with (its tick marks scale to it), so the control cannot offer a value the engine would refuse; when that window is not known the sliders use the same 1K to 128K scale as Ollama.",
+        "Upgrade note: app-only, one-click from Settings > About. No configuration change."
+      ]
+    },
+    {
       "version": "1.4.6",
       "date": "2026-09-16",
       "appOnly": true,
