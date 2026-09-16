@@ -1,6 +1,25 @@
 {
   "releases": [
     {
+      "version": "1.4.4",
+      "date": "2026-09-16",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Settings > LLM reads as a product page: the engine status strip is two lines with chips, the context and KV-cache numbers sit under the model name, and the restart note sits where you are about to act",
+        "A new RhythmAI 27B card says what the shipped model is and what it was trained to do",
+        "One-click eligible from Settings > About; nothing in the stored configuration changes."
+      ],
+      "highlights": [
+        "Settings > LLM: the engine status strip now shows the engine and its state on one line and the model it is serving on the next, with the tier, the configured and available context and the KV-cache size directly under the model name. The explanation moved into the (i).",
+        "Settings: \"Modifying this setting requires app container restart\" now appears directly above each affected card's Save button, and those cards carry a \"Requires restart\" label beside their title instead of a line under the heading.",
+        "Settings > LLM: a new RhythmAI 27B card describes the shipped model - purpose-built for the security operations center, expert-level investigation on every alarm, automatic MITRE ATT&CK mapping for alarms and AIE rules, the Rhythm Insights analysis it drives, fluency in LogRhythm's vocabulary, and its CyberMetric score - with the parameters, trained context and the window this server serves it in.",
+        "Upgrade note: app-only, one-click from Settings > About. No configuration change."
+      ]
+    },
+    {
       "version": "1.4.3",
       "date": "2026-09-16",
       "appOnly": true,
