@@ -1,6 +1,25 @@
 {
   "releases": [
     {
+      "version": "1.4.6",
+      "date": "2026-09-16",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The AI Assistant and Regex Builder settings tabs are now sections of the LLM tab, so everything about the model and the engines is in one place with one Save",
+        "Nothing is lost: the chat and regex models and windows sit in the engine card, retry and parallelism have their own card, and the regex examples keep their controls at the bottom of the tab",
+        "One-click eligible from Settings > About; nothing in the stored configuration changes."
+      ],
+      "highlights": [
+        "Settings: the AI Assistant and Regex Builder tabs are gone from the navigation. Their settings live on the LLM tab: the chat model and context window and the regex model and window in the selected engine's card, Max Attempts and Parallel Threads in a Regex generation card, and the regex example controls in a Regex examples card at the bottom.",
+        "Settings > LLM has one Save button for the whole LLM configuration instead of one per card; the restart dialog and banner behave as in 1.4.3.",
+        "The read-only copies of the engine's model and window that the two old tabs showed on the vLLM tier are gone, together with their \"edit this on the LLM tab\" notices.",
+        "Upgrade note: app-only, one-click from Settings > About. No configuration change; bookmarks to the two removed tabs open the Settings page as usual."
+      ]
+    },
+    {
       "version": "1.4.5",
       "date": "2026-09-16",
       "appOnly": true,
