@@ -1,6 +1,23 @@
 {
   "releases": [
     {
+      "version": "1.4.8",
+      "date": "2026-09-16",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The hint under the vLLM context-window sliders now says how the setting relates to the engine's window instead of only stating the engine's limit, and the slider's top tick names the engine limit",
+        "One-click eligible from Settings > About; nothing in the stored configuration changes."
+      ],
+      "highlights": [
+        "Settings > LLM: under each vLLM window slider the hint reads, for example, \"The engine accepts up to 65,536 tokens per request. RhythmAI is using 32,768 of it; move the slider up to use more.\", and \"RhythmAI uses all of it.\" once the two match. A stored value above the engine's window is called out with the value to lower it to; an unreported engine window keeps the previous advice.",
+        "The top tick of a slider bounded by the engine reads \"64K (engine limit)\" so the bound is visible on the scale itself.",
+        "Upgrade note: app-only, one-click from Settings > About. No configuration change."
+      ]
+    },
+    {
       "version": "1.4.7",
       "date": "2026-09-16",
       "appOnly": true,
