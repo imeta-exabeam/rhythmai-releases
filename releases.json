@@ -1,6 +1,33 @@
 {
   "releases": [
     {
+      "version": "1.4.3",
+      "date": "2026-09-16",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Every setting that only takes effect after the app container restarts now says so, and after such a save RhythmAI offers to restart the container for you - you stay signed in and the page reconnects on its own",
+        "The context windows on Settings > LLM are validated when saved, a cleared box keeps its value, and on the vLLM tier a window above what the engine was started with is refused with the fix spelled out",
+        "The engine status strip says plainly what it shows, the KV-cache figure is the engine's own number, and the shipped vLLM context window is now 65,536 to match the engine",
+        "One-click eligible from Settings > About. If the LLM tab shows \"Context 32,768 configured of 65,536 available\" after upgrading, raise the two vLLM windows to 65,536 and save."
+      ],
+      "highlights": [
+        "Settings marks every field that only takes effect after the app container restarts with the note \"Modifying this setting requires app container restart\", under the field or once under its card. The list is built from the code: the LLM engine and both engines' endpoint, models, context windows and API key, the regex retry and parallel settings, the SIEM connection and key, the database and Neo4j connections, CORS and the container-logs proxy. Threat-intel, logging, audit, graph, incident and insights schedule settings apply live and carry no note.",
+        "After saving a setting that needs a restart, RhythmAI asks \"Restart the app container?\" and warns that running investigations and chats will be interrupted. Restart ends the app cleanly and Docker's restart policy brings the container back through the normal start-up; the page shows that it is reconnecting, polls the health endpoint and reloads when the app answers, and you stay signed in. Later leaves the banner in place, which now has a Restart now button. The app never touches Docker to do this, so the socket proxy stays read-only. If a container has no restart policy, the page says so after two minutes and names the command to start it by hand.",
+        "Every restart started from Settings is recorded in the audit trail as app.restart with the administrator and the reason.",
+        "The SIEM connection card no longer warns about a restart when the save changed nothing; the notice now comes from the server like the LLM one.",
+        "Context windows on Settings > LLM are checked when you save: a whole number between 1,024 and 262,144. Clearing a box keeps the value it had instead of saving a zero, and a stored value outside that range is shown as the shipped default.",
+        "On the vLLM tier, a context window larger than the window the engine was started with is refused; the message tells you to set RHYTHMAI_VLLM_MAX_LEN in .env and recreate the engine.",
+        "The shipped context window for the vLLM tier is now 65,536, matching the window the engine starts with. Existing installs keep what they saved: if the LLM tab shows \"Context 32,768 configured of 65,536 available\", raise both vLLM windows to 65,536 and save.",
+        "The engine status strip now reads \"Shows the engine the app is using now. Edits below take effect after Save and an app restart; on vLLM the model is the one the engine was started with.\" and labels its two context numbers as configured and available.",
+        "The KV-cache size on the strip reports the engine's own figure; it was overstated by about a third on the shipped 27B model.",
+        "Release VRAM now reports the GPU memory actually freed rather than the model's total size.",
+        "Upgrade note: app-only, one-click from Settings > About. Nothing in the stored configuration changes on upgrade. After the upgrade, the restart dialog will appear on the first save of a restart-bound setting; choose Later if you are mid-investigation."
+      ]
+    },
+    {
       "version": "1.4.2",
       "date": "2026-09-15",
       "appOnly": false,
