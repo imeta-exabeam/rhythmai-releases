@@ -1,6 +1,25 @@
 {
   "releases": [
     {
+      "version": "1.4.5",
+      "date": "2026-09-16",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Settings > LLM redesigned: an engine header with stat tiles for the model and the context window, a RhythmAI 27B card with icons and a stat row, and a single restart note per card in the title row",
+        "The KV-cache figures leave the LLM tab; they remain in the diagnostics bundle",
+        "One-click eligible from Settings > About; nothing in the stored configuration changes."
+      ],
+      "highlights": [
+        "Settings > LLM: the engine header shows the engine, its version and a Reachable pill on one line, then two tiles - the model with its tier, and the context window configured against the window available. The KV-cache numbers no longer appear on this tab.",
+        "Settings > LLM: the RhythmAI 27B card now carries a mark, a Version 2 pill, a subtitle and the six capabilities as a two-column grid with icons, with a divided row for parameters, trained context and the serving window.",
+        "Settings: the restart note reads once per affected card, in the title row with an amber dot, in place of the label beside the title and the line above Save. The LLM Engine card's switch-back warning is a soft amber callout.",
+        "Upgrade note: app-only, one-click from Settings > About. No configuration change."
+      ]
+    },
+    {
       "version": "1.4.4",
       "date": "2026-09-16",
       "appOnly": true,
