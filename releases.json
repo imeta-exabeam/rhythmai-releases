@@ -1,6 +1,26 @@
 {
   "releases": [
     {
+      "version": "1.5.1",
+      "date": "2026-09-17",
+      "appOnly": false,
+      "servicesChanged": [
+        "app",
+        "gpu-probe"
+      ],
+      "summary": [
+        "Settings > LLM now shows the GPUs RhythmAI's engines use, with each card's memory split into weights, KV cache, other and free, and works out the context window the Ollama model can actually be given on the card",
+        "Run the update script and answer 'y' when it offers to replace docker-compose.yml: this release adds a gpu-probe service (the same app image with a different entrypoint); declining leaves it undefined and the GPUs card will report that the probe did not answer."
+      ],
+      "highlights": [
+        "Settings > LLM: a GPUs card with one row per card - the card's name and size, a bar of weights, KV cache, other and free memory, and chips saying which engine may use it (vLLM pinned, Ollama shared). The strip and the card refresh every fifteen seconds while the tab is open.",
+        "The Ollama context-window sliders now stop at what the GPU can hold for the shipped model, worked out from the model's own metadata and the card's free memory, and the hint says so: \"This GPU can hold up to 138,240 tokens for RhythmAI:27b (NVIDIA RTX PRO 6000, 2 slots). RhythmAI is using 32,768 of it; move the slider up to use more.\" The limit is advisory; a larger window still saves.",
+        "A new gpu-probe container runs beside the app on an internal network with no port and no Docker access; it answers one read-only query. When it is not running, the card says so and shows the cards detected at install, if the installer recorded them.",
+        "The Container Logs page can show the gpu-probe log (config migration 6).",
+        "Upgrade note: not app-only. Run the update script and answer 'y' when it offers to replace docker-compose.yml: that file carries the gpu-probe service and its network. A stack that keeps the old compose runs fine, with the GPUs card reporting that the probe did not answer."
+      ]
+    },
+    {
       "version": "1.4.8",
       "date": "2026-09-16",
       "appOnly": true,
