@@ -1,6 +1,25 @@
 {
   "releases": [
     {
+      "version": "1.6.1",
+      "date": "2026-09-18",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "LogRhythm tool answers are checked against the data: every result carries its record count, a log search with no time span in the question now covers the last 24 hours, and when an answer says nothing was found while the tools returned rows, RhythmAI adds its own check line under the answer",
+        "App-only: one click on Settings > Updates, no compose change."
+      ],
+      "highlights": [
+        "Record counts: each LogRhythm tool result now states how many records it holds, both in the evidence the model reads (\"search_logs (ok, 6 records)\") and in the result card's header.",
+        "The check line: when the answer claims the tools found nothing but the app counted records, a line appears under the answer, written by RhythmAI and never by the model: \"Check: LogRhythm returned 6 records for Search logs. The answer above says none were found; the card below holds the data.\" The event is audited as siem.tool_check.",
+        "Default time span: a log search whose question names no period searched LogRhythm's one-hour default and came back empty. It now searches the last 24 hours; admins can change logrhythmTools.defaultSearchWindow in the config (a number and m, h or d).",
+        "A second planning round is taken only when a result is a short list of ids to follow up, not when it already holds the records to answer from.",
+        "Upgrade note: app-only. One click on Settings > Updates; the new default appears without any config change."
+      ]
+    },
+    {
       "version": "1.6.0",
       "date": "2026-09-17",
       "appOnly": false,
