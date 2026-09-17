@@ -1,6 +1,25 @@
 {
   "releases": [
     {
+      "version": "1.6.3",
+      "date": "2026-09-18",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "LogRhythm tool results are easier for the assistant to read right: log searches show where the keyword matched in each message and, above 200 records, lead with a summary of all of them; every large list (alarms, cases, hosts) arrives as a table; numeric arguments are kept within each tool's limits; and the check line also catches an answer that claims a call failed when it returned records",
+        "App-only: one click on Settings > Updates, no compose change."
+      ],
+      "highlights": [
+        "The match column: a keyword search matches the raw message text, so each row now shows the 60 characters around the match. Asked where a user was mentioned, the assistant can see that 95 hits were a file path and one was the account field.",
+        "The aggregate view: a search that returns more than 200 records leads with a summary of all of them, top values by event, rule, host, login and account, followed by the first 200 rows. Searches ask LogRhythm for up to 1,000 records by default (logrhythmTools.maxSearchRecords; aggregateSearchAbove sets the threshold). A search that stopped at its cap tells the assistant to say \"at least\".",
+        "Every large list is a table: alarm, case, host and other list results of ten or more records are rendered with their most useful columns instead of raw JSON, and are never truncated away.",
+        "Arguments within limits: a numeric argument outside a tool's declared range is clamped to the nearest bound and the adjustment is recorded on the plan. A request for 1,000 alarms now asks for the 500 the API allows instead of failing.",
+        "Upgrade note: app-only. One click on Settings > Updates; new defaults appear without any config change."
+      ]
+    },
+    {
       "version": "1.6.2",
       "date": "2026-09-18",
       "appOnly": true,
