@@ -1,6 +1,26 @@
 {
   "releases": [
     {
+      "version": "1.6.0",
+      "date": "2026-09-17",
+      "appOnly": false,
+      "servicesChanged": [
+        "app",
+        "lrsiem-mcp"
+      ],
+      "summary": [
+        "The three assistants can now answer through LogRhythm's own MCP server: turn the LogRhythm toggle on in a chat and ask; RhythmAI chooses read-only LogRhythm tools, runs them, and answers from the results, with a line under each answer saying which tools were used",
+        "Run the update script and answer 'y' when it offers to replace docker-compose.yml: this release adds the lrsiem-mcp container behind the logrhythm-tools profile; the script then offers to take the LogRhythm API token, or the tools stay off until an admin adds it."
+      ],
+      "highlights": [
+        "LogRhythm tools in the Alarm Investigation, Rhythm Insights and Universe assistants: a LogRhythm toggle in the chat; with it on, RhythmAI plans which of LogRhythm's read-only tools answer the question, validates the plan against the server's own schemas (never a write, never an invented id), runs them, and answers in plain English with a \"Used: ...\" footer and collapsed result cards. Off by default; an admin enables it on Settings > SIEM > LogRhythm tools.",
+        "The LogRhythm MCP server runs in its own container, lrsiem-mcp, on an internal network with no published port, holding only the Platform Manager URL and a token for a LogRhythm user made for RhythmAI. Every call is audited in RhythmAI with the analyst's name and the tool's name.",
+        "Measured before it shipped: on a suite of 339 analyst questions the model never proposed a write or an unknown tool, and named the expected tool in 89 % of cases.",
+        "The Skill Store and its in-chat actions (\"close this alarm\", \"create a case\") are removed, and so is the \"file the case\" button on the Universe evidence drawer, which drafted through it; the draft itself stays. LogRhythm's server is the one tool layer, and write actions return in a later release behind a confirmation card. Config migration 7 tidies the stored settings and adds lrsiem-mcp to the Container Logs list.",
+        "Upgrade note: not app-only. Run the update script and accept the compose replacement; enter the LogRhythm token when offered, or later by adding the LRSIEM_ lines and the logrhythm-tools profile to .env as .env.example describes."
+      ]
+    },
+    {
       "version": "1.5.1",
       "date": "2026-09-17",
       "appOnly": false,
