@@ -1,6 +1,25 @@
 {
   "releases": [
     {
+      "version": "1.6.4",
+      "date": "2026-09-18",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The assistant now reasons before answering from LogRhythm tool results: on the vLLM tier, thinking is turned on at low effort for that answer only, bounded by the runaway guard; the check line no longer misfires on counts ending in zero; and a search asks for the configured record count unless the question names a number",
+        "App-only: one click on Settings > Updates, no compose change."
+      ],
+      "highlights": [
+        "Thinking at low effort for tool answers (vLLM tier): when LogRhythm tools ran for a question, the model reasons before it answers, at the lowest of the template's three effort levels. The planning call and every other chat stay as they were; the Ollama tier is unchanged. Settings: logrhythmTools.thinkingEnabled, thinkingEffort, thinkingMaxChars.",
+        "Never the spiral: the engine is always told the effort level (the template's own default is the highest), and an unclosed reasoning block longer than the ceiling falls back to a no-think answer, as coverage analysis has done since 1.2.19.",
+        "Check line fixed: \"At least 50 records returned\" no longer reads as \"0 records\"; phrases match on word boundaries.",
+        "Record counts: a search asks LogRhythm for the configured count (1,000) unless the question itself names a number, so an unqualified question is no longer answered from the model's own guess of 50.",
+        "Upgrade note: app-only. One click on Settings > Updates; the new defaults appear without any config change."
+      ]
+    },
+    {
       "version": "1.6.3",
       "date": "2026-09-18",
       "appOnly": true,
