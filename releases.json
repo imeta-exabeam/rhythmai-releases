@@ -1,6 +1,25 @@
 {
   "releases": [
     {
+      "version": "1.6.6",
+      "date": "2026-09-18",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The Rhythm Insights assistant now knows the last seven days of alarms from RhythmAI's own database, exact and by day, and every answer carries a badge naming its source, RhythmAI's data or LogRhythm's tools; the LogRhythm tools stay on Rhythm Insights and Alarm Investigation and leave the Universe assistant",
+        "App-only: one click on Settings > Updates, no compose change."
+      ],
+      "highlights": [
+        "Alarm activity in the Insights assistant: today's alarm count, each of the last seven days, the seven-day total and the top rules, computed from RhythmAI's alarm store. \"How many alarms do we have today\" is answered exactly, with no API page limit. Alarm status is not held in the store, so open versus closed remains a LogRhythm-tools question, and the assistant is told so.",
+        "Source badge: each finished answer shows \"Answered with LogRhythm tools\" or, on Rhythm Insights, \"From RhythmAI's data\", so an analyst always knows where a number came from.",
+        "The LogRhythm tools leave the Universe graph assistant, whose questions are about the graph on the canvas; the toggle is gone from that panel. Rhythm Insights and Alarm Investigation keep the tools.",
+        "Page sizes: a list's count is set to the configured record limit, held to the API's maximum of 500, unless the question names a number; the summary lines above result tables now include a by-day count.",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.6.5",
       "date": "2026-09-18",
       "appOnly": true,
