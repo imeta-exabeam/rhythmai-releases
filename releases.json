@@ -1,6 +1,26 @@
 {
   "releases": [
     {
+      "version": "1.6.5",
+      "date": "2026-09-18",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Report questions now fetch their data: asked for a summary, count, breakdown or report over alarms, logs, cases, hosts or rules, the assistant chooses the LogRhythm tools that fetch it before formatting; tool bounds changed in earlier patches now reach upgraded installs through a config migration; result tables carry summary lines from 20 records; and the assistant says so when the tools were on but none was chosen",
+        "App-only: one click on Settings > Updates, no compose change. Config migration 8 runs on first start."
+      ],
+      "highlights": [
+        "Report questions fetch data first: \"create an executive summary of this week's alarms\" used to be treated as a formatting job and answered with \"I don't have access to your alarm data\". The planner now fetches the alarms (per status when asked) and formats afterwards. Measured on 12 report-style questions: the expected tool was chosen in all 12, and no write tool was ever proposed.",
+        "Config migration 8: the tool bounds raised in 1.6.3 (records per search, result caps) never reached installs upgraded from 1.6.2, because the first boot stores every default and the stored copy wins. The migration moves a stored value to the new default only where it still equals the old shipped default; anything an administrator changed is kept.",
+        "Summary lines from 20 records: counts by rule, host, login and account now appear above result tables of 20 records or more, so the assistant reads the counts instead of tallying rows.",
+        "\"Last 7 days\" is a period, not a count: the app no longer treats a number followed by a time unit, or an alarm or case id, as the record count the analyst asked for.",
+        "A new check line: when the LogRhythm tools were on, no tool was chosen and the answer claims it has no access, the app says so under the answer and suggests how to ask.",
+        "Upgrade note: app-only. One click on Settings > Updates; migration 8 runs on first start and is logged in the container log."
+      ]
+    },
+    {
       "version": "1.6.4",
       "date": "2026-09-18",
       "appOnly": true,
