@@ -11,13 +11,13 @@
       ],
       "summary": [
         "The one-click updater now recreates the GPU probe alongside the app so the two never drift apart, the probe no longer prints a traceback when the driver query stalls, and its health check waits longer than the query so a stall is reported as a plain reason",
-        "Not app-only: the updater image moves to 1.0.1 and the probe's health check timeout changes in the compose file. One click on Settings > Updates upgrades the app; run the update script once to bring the updater and the probe level."
+        "Not app-only: the updater image moves to 1.0.1 and the probe's health check changes in the compose file, so one-click is refused for this release. Run the update script once (deploy/update-rhythmai.sh or Update-RhythmAI.ps1); it replaces the compose and recreates the app, the updater and the probe together."
       ],
       "highlights": [
         "Updater 1.0.1: after the app is healthy on the new version, the updater recreates the gpu-probe container on the same image with the same care (its own settings kept, health-gated, restored on failure). An install without a probe is skipped; a probe that fails its gate stays on the old version and the message says so. A rollback carries the probe back too.",
         "GPU probe: when nvidia-smi does not answer within 5 seconds and the health check has already given up, the probe logs one line instead of a traceback. The compose health check now waits 8 seconds so a slow driver answer arrives as a 503 with its reason.",
         "Updates card: when the probe runs an older version than the app (installs still on updater 1.0.0), the card says so and names the update script.",
-        "Upgrade note: NOT app-only. One click on Settings > Updates upgrades the app. To move the updater to 1.0.1 and apply the new probe health check, run deploy/update-rhythmai.sh or Update-RhythmAI.ps1 once; until then the probe stays on its current version and the card says so."
+        "Upgrade note: NOT app-only. Run deploy/update-rhythmai.sh or Update-RhythmAI.ps1 once; the Updates card refuses one-click for this release because the compose file changed. From the next app-only release on, one click upgrades the app and the new updater carries the GPU probe along; the card says so if the probe is ever behind."
       ]
     },
     {
