@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.8.1",
+      "date": "2026-09-20",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The feature is now called LogRhythm MCP everywhere a person reads it: the chip in the chat input, the settings card heading and switch, the two permissions on the Roles page, the answer badge and the reasons a write is refused. Individual tools are still tools; nothing else changed",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "LogRhythm MCP: the chat chip reads \"LogRhythm MCP\" instead of \"LogRhythm\"; Settings > SIEM shows a card headed \"LogRhythm MCP\" with \"Enable LogRhythm MCP\"; the Roles page shows \"LogRhythm MCP · read\" and \"LogRhythm MCP · write\"; answers are badged \"Answered with LogRhythm MCP\".",
+        "Upgrade note: app-only. One click on Settings > Updates. Permissions, settings and audit keys are unchanged; only the words on screen."
+      ]
+    },
+    {
       "version": "1.8.0",
       "date": "2026-09-20",
       "appOnly": true,
