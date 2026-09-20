@@ -1,6 +1,23 @@
 {
   "releases": [
     {
+      "version": "1.8.2",
+      "date": "2026-09-20",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The Threat Universe files cases again: say \"create a case\" in the Universe chat, or click Create case in the Evidence drawer, and RhythmAI shows the card with the marked alarms as evidence, the attack story and the Data Indexer summary as notes, and the graph image as file evidence; a person with the write permission confirms it",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Create a case from the Universe: after Analyze with AI, \"create a case\" in the chat builds the card from the investigation itself: the alarms in the Evidence bucket, the story the assistant wrote, the Data Indexer summary, and the canvas as it looks at that moment. The Evidence drawer's Create case button does the same without the chat. Both need at least one alarm in the bucket; the card says so when there is none.",
+        "The graph image as evidence: LogRhythm MCP has no file tool, so RhythmAI attaches the image itself through LogRhythm's case API, listed on the settings card under Cases as \"graph image (RhythmAI)\" with its own switch. A failure to attach the image never loses the case: the card shows the case number and the step that failed.",
+        "Upgrade note: app-only. One click on Settings > Updates. Write tools stay off until an admin allows them."
+      ]
+    },
+    {
       "version": "1.8.1",
       "date": "2026-09-20",
       "appOnly": true,
