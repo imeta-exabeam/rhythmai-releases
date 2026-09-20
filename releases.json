@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.7.4",
+      "date": "2026-09-20",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The context window tile on the LLM engine card now reads in K (\"32K configured of 64K available\") instead of exact token counts, since a model's trained window is always a whole number of KiB and the K figure is exact, not a rounding",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Context window tile in K: \"32,768 configured of 65,536 available\" now reads \"32K configured of 64K available\". Every other token figure on the page (the KV cache budget, the accept/refuse sentences on the context slider) is unchanged and stays exact, because those numbers are not always whole KiB.",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.7.3",
       "date": "2026-09-20",
       "appOnly": true,
