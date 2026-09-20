@@ -1,6 +1,26 @@
 {
   "releases": [
     {
+      "version": "1.7.2",
+      "date": "2026-09-20",
+      "appOnly": false,
+      "servicesChanged": [
+        "app",
+        "updater",
+        "gpu-probe"
+      ],
+      "summary": [
+        "The one-click updater now recreates the GPU probe alongside the app so the two never drift apart, the probe no longer prints a traceback when the driver query stalls, and its health check waits longer than the query so a stall is reported as a plain reason",
+        "Not app-only: the updater image moves to 1.0.1 and the probe's health check timeout changes in the compose file. One click on Settings > Updates upgrades the app; run the update script once to bring the updater and the probe level."
+      ],
+      "highlights": [
+        "Updater 1.0.1: after the app is healthy on the new version, the updater recreates the gpu-probe container on the same image with the same care (its own settings kept, health-gated, restored on failure). An install without a probe is skipped; a probe that fails its gate stays on the old version and the message says so. A rollback carries the probe back too.",
+        "GPU probe: when nvidia-smi does not answer within 5 seconds and the health check has already given up, the probe logs one line instead of a traceback. The compose health check now waits 8 seconds so a slow driver answer arrives as a 503 with its reason.",
+        "Updates card: when the probe runs an older version than the app (installs still on updater 1.0.0), the card says so and names the update script.",
+        "Upgrade note: NOT app-only. One click on Settings > Updates upgrades the app. To move the updater to 1.0.1 and apply the new probe health check, run deploy/update-rhythmai.sh or Update-RhythmAI.ps1 once; until then the probe stays on its current version and the card says so."
+      ]
+    },
+    {
       "version": "1.7.1",
       "date": "2026-09-20",
       "appOnly": true,
