@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.7.3",
+      "date": "2026-09-20",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Settings > SIEM > LogRhythm tools: clicking Test connection now shows its own result. It used to silently repeat the same status line already on screen, which read as the button doing nothing when the connection had not changed",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Test connection now says so: a click reports \"Checked just now: Enabled and connected (LogRhythm MCP 1.29.1).\" or the reason it could not, as its own line under the button, separate from the status line above that only changes when the verdict itself changes.",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.7.2",
       "date": "2026-09-20",
       "appOnly": false,
