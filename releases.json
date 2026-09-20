@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "version": "1.9.0",
+      "date": "2026-09-21",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Every LogRhythm MCP write tool an admin has switched on can now be asked for in a chat: with the LogRhythm MCP chip on, \"add the phishing tag to case 4041\" or \"set case 4041 to resolved\" becomes a card with the tool's own fields, confirmed by a person with the write permission. Case cards gain tags and an Open in LogRhythm link",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "The generic write card: the planner may propose one write per question, in its own list, only from the write tools switched on for this install; RhythmAI validates it like a read (known tool, arguments from the question or the context, ids locked), shows it on a card whose fields come from the tool's own schema, and runs it only when a person with the write permission clicks the tool's verb. Tools that delete or replace stay off until an admin allows them and carry a warning on the card.",
+        "Tags and the console link: a case card offers the tags LogRhythm knows as chips; the result of any case card links to the case in the Web Console (Settings > SIEM: Console URL, default https://<platform manager>:8443).",
+        "Measured: the selection suite gains a write batch and a never-write batch; the read rates are unchanged.",
+        "Upgrade note: app-only. One click on Settings > Updates. Write tools stay off until an admin allows them; the generic card needs the LogRhythm MCP chip on for the question, the case and alarm cards do not."
+      ]
+    },
+    {
       "version": "1.8.2",
       "date": "2026-09-20",
       "appOnly": true,
