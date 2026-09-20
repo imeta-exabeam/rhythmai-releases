@@ -1,6 +1,23 @@
 {
   "releases": [
     {
+      "version": "1.7.1",
+      "date": "2026-09-20",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "With the LogRhythm toggle on, the Rhythm Insights assistant now answers alarm-count questions (today, open versus closed, top rules this week) from RhythmAI's own store instead of reaching for a LogRhythm tool that cannot express them; and a status name the model writes for an alarm listing is mapped to the code LogRhythm expects",
+        "App-only: one click on Settings > Updates. No schema or config migration."
+      ],
+      "highlights": [
+        "Insights knows what it already holds: the tool planner on Rhythm Insights now sees the alarm-activity lines from RhythmAI's store (counts by day, open versus closed today and this week, the top rules), so questions the store answers no longer trigger a LogRhythm alarm listing with a status filter LogRhythm refuses. The answer comes from the store, badged as such.",
+        "Status names for alarm listings: when the model asks LogRhythm for alarms with a status written as a word (open, closed, working ...), RhythmAI maps it to the single code LogRhythm's API filters on; an unknown word is dropped from the call and said so, as before.",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.7.0",
       "date": "2026-09-20",
       "appOnly": true,
