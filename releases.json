@@ -1,6 +1,25 @@
 {
   "releases": [
     {
+      "version": "1.8.0",
+      "date": "2026-09-20",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "LogRhythm write tools arrive behind a confirm card: on Alarm Investigation an analyst can say \"close this alarm as a false positive\" or \"create a case for this alarm\" and RhythmAI shows a card with the exact change; nothing is written until a person with the new write permission confirms it. Reading and writing are now two permissions on the Roles page, and every write tool has its own switch on the settings card",
+        "App-only: one click on Settings > Updates. On upgrade every existing role gets the write permission off; only the built-in Admin role gets it on. Write tools stay off until an admin allows them."
+      ],
+      "highlights": [
+        "Two permissions: \"LogRhythm tools · read\" (the existing one, renamed) lets an analyst run read tools from a chat; \"LogRhythm tools · write\" lets them confirm a write on a card. Write needs read. Existing roles get write off on upgrade, except the built-in Admin role.",
+        "The write switch and a switch per tool: Settings > SIEM > LogRhythm tools gains \"Allow write tools\" (off by default) and, in each area's tool list, an on/off switch beside every write tool. Tools that delete or replace something ship off and ask once before they are allowed.",
+        "The confirm card: a write is never run by the model. When an analyst asks to close an alarm or create a case, RhythmAI writes the exact change on a card with editable fields (status; case name, priority, summary, the notes and the alarm evidence) and a Close alarm or Create case button that only works for a person with the write permission. The result shows the case number and each step's outcome. LogRhythm's alarm tool takes no comment, so a close is status only and the card says so.",
+        "Attribution: writes run under the RhythmAI service user in LogRhythm, so every case summary and note carries \"Filed by <analyst> via RhythmAI\", and RhythmAI's own audit records the analyst, the tool and the outcome of every step.",
+        "Upgrade note: app-only. One click on Settings > Updates. Nothing changes for analysts until an admin turns on \"Allow write tools\" and grants the write permission to a role."
+      ]
+    },
+    {
       "version": "1.7.4",
       "date": "2026-09-20",
       "appOnly": true,
