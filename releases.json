@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "version": "1.10.0",
+      "date": "2026-09-21",
+      "appOnly": false,
+      "servicesChanged": [
+        "app",
+        "lrsiem-mcp"
+      ],
+      "summary": [
+        "LogRhythm MCP moves to LogRhythm's 0.4.1 server: four new read tools (an AI Engine rule template, and Sigma-to-AIE rule conversion with preview and supported log sources), LogRhythm's own destructive annotations now set which write tools ship off, and the sidecar image runs on the current MCP SDK",
+        "Not app-only: the lrsiem-mcp container image changes. Run the update script once; one-click is refused for this release because the compose file changed."
+      ],
+      "highlights": [
+        "Four new tools from LogRhythm 0.4.1: get_aie_rule_template (a similar rule to start from), convert_sigma_rule_to_aie, preview_sigma_conversion and list_supported_sigma_logsources, all read-only, in a new Sigma conversion area on Rhythm Insights.",
+        "Destructive by LogRhythm's word: write tools LogRhythm annotates as destructive (the deletes and removes, and restarting the AI Engine) now ship switched off, whether or not RhythmAI's own list knew them. An admin can still allow any of them on the settings card.",
+        "Upgrade note: NOT app-only. Run deploy/update-rhythmai.sh or Update-RhythmAI.ps1 once; it replaces the compose and recreates the app and the lrsiem-mcp container together. The API token and the container's .env lines are unchanged."
+      ]
+    },
+    {
       "version": "1.9.0",
       "date": "2026-09-21",
       "appOnly": true,
