@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.10.1",
+      "date": "2026-09-21",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The LogRhythm MCP card's summary line now says what its counts mean: how many read tools can be used, how many of the write tools are switched on (or that write tools are off), and whether AI Engine rule tools are available. It used to carry a sentence from before write tools existed",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Settings > SIEM > LogRhythm MCP: the line under the tool areas reads, for example, \"44 read tools can be used on any question. 26 of 29 write tools are switched on; RhythmAI runs a write only when an analyst confirms it on a card. This LogRhythm deployment offers no AI Engine rule tools.\" Every clause follows the switches; with write tools off it says so.",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.10.0",
       "date": "2026-09-21",
       "appOnly": false,
