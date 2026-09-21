@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "version": "1.10.2",
+      "date": "2026-09-22",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Restarting the AI Engine and removing case collaborators, tags or playbooks now ship switched off among the LogRhythm MCP write tools, matching LogRhythm's own destructive annotations; an admin can still allow them on the settings card. Found on a LogRhythm 7.26 SIEM, where the AI Engine tools appear for the first time",
+        "App-only: one click on Settings > Updates. If your SIEM gained the AI Engine API after the lrsiem-mcp container started, restart that container once and click Test connection twice; the tools register when the container starts."
+      ],
+      "highlights": [
+        "Destructive by default off: restart_aie_engine, remove_case_collaborators, remove_case_tags and remove_case_playbook join the deletes as tools that ship off. Nothing an admin already set changes; the default is read live.",
+        "AI Engine tools after a SIEM upgrade: the lrsiem-mcp container probes the AI Engine API once when it starts. On a SIEM upgraded afterwards, restart the container (docker restart lrsiem-mcp) and the seven rule tools and the three Sigma conversion tools appear on the card; the first Test connection after a restart may report unreachable while the app reconnects, the second succeeds.",
+        "The tool list under each area: write tools are no longer drawn faded when they can run; only a tool whose switch is off is dimmed, and the area header counts reads and writes separately (\"Cases - 42 tools: 19 read, 21 of 23 write switched on\").",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.10.1",
       "date": "2026-09-21",
       "appOnly": true,
