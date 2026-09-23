@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "version": "1.11.0",
+      "date": "2026-09-23",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Paste a Sigma rule into the AI Assistant with the LogRhythm MCP chip on and RhythmAI runs LogRhythm's own Sigma converter, describes the resulting AI Engine rule in words, and offers a Create rule card; confirming it creates the rule in LogRhythm",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Sigma to AIE: a message carrying a Sigma rule (YAML with logsource, detection and condition) is routed to the lrsiem-mcp converter, never to the model: preview_sigma_conversion then convert_sigma_rule_to_aie run with the pasted YAML and the answer describes the produced rule (name, vendor message IDs, each filter in plain language, risk rating, the converter's review notes) or quotes the converter's exact refusal. The converter covers Windows Sysmon and Security categories only; a rule with no logsource category or a 'not' condition is refused and the answer says why.",
+        "Create rule card: when write tools are on and create_aie_rule is switched on, the same turn carries a card with the rule name and a risk rating mapped from the Sigma level; the vendor message IDs, every filter and what was copied from the template rule are shown read-only. Confirm posts the converted document to LogRhythm and reports the new rule id; audit event rule.created.",
+        "Saying 'create this rule' (typos included) on a later turn brings the newest card back for fifteen minutes instead of asking the planner.",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.10.3",
       "date": "2026-09-23",
       "appOnly": true,
