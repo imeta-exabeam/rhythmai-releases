@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.10.3",
+      "date": "2026-09-23",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "LogRhythm MCP has its own tab under Settings, named MCP, right after LogRhythm SIEM; the card moved there unchanged",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Settings > MCP: the LogRhythm MCP card (the switches, Test connection, the tool areas and their per-tool switches) now lives on its own tab instead of the bottom of the LogRhythm SIEM tab. The SIEM tab keeps the connection settings and the Console URL.",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.10.2",
       "date": "2026-09-22",
       "appOnly": true,
