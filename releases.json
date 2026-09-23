@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "version": "1.12.0",
+      "date": "2026-09-23",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Ask for a rule by name or MITRE technique, no pasting: RhythmAI ships a snapshot of SigmaHQ's Windows rules filtered to the ones LogRhythm's converter accepts; one clear match converts straight to a Create rule card, several are listed to pick from, and every created rule records the Sigma id it came from",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Bundled SigmaHQ snapshot: 1,094 of SigmaHQ's 2,410 Windows rules convert clean and are included; the rest are refused by the converter (no vendor message ID mapping for the logsource, unsupported fields, or a 'not' in the condition) and left out. Pinned to SigmaHQ commit 16eb587 (2026-09-23), rebuilt every release; nothing is fetched at runtime and no rule is model-written. Detection Rule License 1.1, authors and references kept.",
+        "In chat: 'create a rule for mimikatz', 'do you have a sigma rule for T1003.001', 'which rules detect LSASS dumping'. One strong match converts through the same path as a pasted rule and the answer names the SigmaHQ rule; several matches are listed as numbered lines and 'use the second one' (or the title, or the Sigma id) converts that one; no match says so and offers a paste or a technique id.",
+        "Provenance: a rule created from Sigma, pasted or bundled, carries the Sigma id, title, modified date and status in its Additional Details, so a later release can tell you when SigmaHQ has a newer version.",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.11.0",
       "date": "2026-09-23",
       "appOnly": true,
