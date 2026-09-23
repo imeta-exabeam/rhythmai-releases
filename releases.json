@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.12.1",
+      "date": "2026-09-23",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "After RhythmAI lists bundled Sigma rules, replying with just the number (\"3\", \"option 2\", \"the third\") now converts that rule; 1.12.0 accepted only \"use the third one\", the title or the Sigma id, and a bare number fell through to the model",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Pick by number: \"3\", \"#3\", \"number 3\", \"option 2\", \"the third\", \"go with 2\" all pick from the list RhythmAI showed in the last fifteen minutes. Nothing changes for messages that merely contain a number (\"close alarm 3\", \"the first 3 alarms\").",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.12.0",
       "date": "2026-09-23",
       "appOnly": true,
