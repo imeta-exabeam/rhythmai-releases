@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.13.1",
+      "date": "2026-09-24",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The update script can turn the LogRhythm MCP tools on without a prompt: -LrsiemHost and -LrsiemTokenFile give it the Platform Manager host and the API token, so an unattended run (-Yes) configures the sidecar too",
+        "App-only: one click on Settings > Updates; refresh the script from the image once to get the new parameters."
+      ],
+      "highlights": [
+        "Update-RhythmAI.ps1 2.1.0: -LrsiemHost <host or IP> and -LrsiemTokenFile <file> replace the two LogRhythm questions of the interactive run; the token is read from the file, never printed and never logged, the .env lines and the logrhythm-tools profile are written exactly as the interactive offer writes them, and the sidecar starts with the stack. With only the token file given, the host comes from the app's own SIEM setting. A site that already has a token line is left as it is and told so.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image; then refresh the script once: cmd /c \"docker run --rm --entrypoint cat rhythmai/rhythmai:latest /app/deploy/Update-RhythmAI.ps1 > Update-RhythmAI.ps1\"."
+      ]
+    },
+    {
       "version": "1.13.0",
       "date": "2026-09-24",
       "appOnly": true,
