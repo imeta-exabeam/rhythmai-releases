@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "version": "1.14.0",
+      "date": "2026-09-24",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Turning the LogRhythm MCP chip on in the coverage chat now shows questions the tools are proven to answer, each with a small LR-MCP tag; the same tag marks bank questions among the follow-ups after an answer",
+        "App-only: one click on Settings > Updates. The update script is 2.1.1 (model image pulled through Docker; a half-applied vLLM profile is cleaned up before the update) - refresh it once from the image."
+      ],
+      "highlights": [
+        "The suggested-question bank ships in the image and is validated, not written on trust: every question passed the tool planner 5 of 5 on both engines (Ollama 27B and vLLM awq-gdn8) under the catalogue with and without the AI Engine tools, then 3 of 3 executions on the reference SIEM (records returned, no empty or failure claim, no tool-check contradiction, a figure or name from the result present in the answer, and no count over a capped search). 18 of 38 candidates survived. Questions whose tools this install's sidecar has not registered (the AI Engine ones on a SIEM before 7.26) are never shown.",
+        "Coverage surface in this release; alarm-bound questions for the investigation surface follow. Clicking a suggestion fills the composer with the chip on, exactly like the follow-up pills.",
+        "Update-RhythmAI.ps1 2.1.1: the Tier phase pulls the model image through the Docker daemon (an image already on the box passes at once; a refused pull gets one login with the token) instead of probing the registry from the host, which timed out behind a customer proxy; a vLLM profile left switched on by an earlier failed run is switched off before the Update phase brings the stack up, and the Tier phase turns it back on in the right order.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image; then refresh the script once: cmd /c \"docker run --rm --entrypoint cat rhythmai/rhythmai:latest /app/deploy/Update-RhythmAI.ps1 > Update-RhythmAI.ps1\"."
+      ]
+    },
+    {
       "version": "1.13.3",
       "date": "2026-09-24",
       "appOnly": true,
