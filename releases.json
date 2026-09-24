@@ -1,6 +1,28 @@
 {
   "releases": [
     {
+      "version": "1.15.0",
+      "date": "2026-09-25",
+      "appOnly": false,
+      "servicesChanged": [
+        "app",
+        "lrsiem-mcp"
+      ],
+      "summary": [
+        "The customer update script 2.2.0 carries the lessons of the first field upgrade: a driver gate with plain instructions, a Windows memory cap, the engine's own log on a failed start, backups that find the database whatever the container is called, and cleaner handling of orphans and half-applied profiles",
+        "LogRhythm tools: every read tool now reports a LogRhythm error as a structured message instead of a bare failure, sort parameters are validated against the API's own field lists, and an answer built on an unfiltered list says so",
+        "Suggested questions reach the investigation chat (alarm-bound questions when an alarm is open), and the Health Check diagnostics bundle now covers the vLLM engine, the GPU probe, the LogRhythm sidecar and the update checks",
+        "Services changed: app and the lrsiem-mcp sidecar (0.4.1-2). One click on Settings > Updates installs both; refresh the update script once from the image."
+      ],
+      "highlights": [
+        "Update-RhythmAI.ps1 2.2.0: when the vLLM tier is planned and the NVIDIA driver is older than 580 (the engine image needs CUDA 13.0) the run stops and says exactly what to do: update the driver, restart Docker (wsl --shutdown then Docker Desktop on Windows; reboot on Ubuntu), run again. On Windows the engine's share of the card is capped at 90% because CUDA inside WSL2 sees about 1.7 GiB less than the host reports. A failed engine start now shows vLLM's own last lines (backups\\<stamp>\\vllm-tail.log). A rerun on the same version still fetches a release model that is missing from the box. The backup finds the postgres container by its compose labels and reads the database user and name from .env. -LrsiemHost rejects a file path. A model pull that fails on DNS prints the dns: hint for the ollama service. A Tier failure after the profile was written reverts it. Services your compose defines that the reference no longer has (n8n on first-generation sites) are listed with an offer to remove the containers; volumes are never removed. The report prints the manual steps a span implies (Force re-classify after 1.2.7).",
+        "lrsiem-mcp 0.4.1-2: 34 read tools that raised on a LogRhythm 4xx/5xx now return {ok:false, status, message}; list_cases and list_log_sources validate order_by and direction against the fields LogRhythm accepts (log sources: name, entityName, logSourceType, logSourceHostName, systemMonitorAgentName, maxLogDate, isSilentLogSourceEnabled, id, recordStatus; ascending/descending) and refuse others with the allowed list. In the app, a call whose filter was dropped as invalid carries the note that its records are unfiltered, and the answer rules forbid presenting that list as the filtered count.",
+        "Suggested questions, slice 2: the LogRhythm MCP row appears in the investigation chat; alarm-bound questions (the events behind this alarm, the host behind it, the rule that fired) show only when an alarm is open; topology questions (hosts, entities, networks) are available without one. Validated on both engines and against a live alarm on the reference SIEM: 9 of 27 investigation candidates shipped beside the 18 coverage questions.",
+        "Diagnostics bundle: an engine section for whichever engine is active (vLLM models, health and metrics head when the profile is on), the GPU probe's cards and driver, the LogRhythm tools status, the update-checks preflight and verify results, the suggested-question bank counts, a known-missing list in the manifest, and Bearer tokens scrubbed from free text.",
+        "Upgrade note: services app and lrsiem-mcp. One click on Settings > Updates; then refresh the script once: cmd /c \"docker run --rm --entrypoint cat rhythmai/rhythmai:latest /app/deploy/Update-RhythmAI.ps1 > Update-RhythmAI.ps1\". Sites with the sidecar on get 0.4.1-2 from the compose replace or the one-click path."
+      ]
+    },
+    {
       "version": "1.14.0",
       "date": "2026-09-24",
       "appOnly": true,
