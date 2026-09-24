@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.13.2",
+      "date": "2026-09-24",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The Sigma routes in chat run only when the analyst says Sigma or pastes a complete Sigma rule; a pasted event, a syslog extract or any other YAML never triggers a bundled-rule search, and the answer for a search result no longer claims that a listed rule matches what was pasted",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Found on dev: a pasted Sysmon event with 'create an AIE rule that detects this' was read as a bundled-rule search and returned unrelated rules, and the model then claimed one of them matched the event. The catalogue search now requires the word Sigma in the message and refuses anything paste-shaped; the pasted-rule route requires title, logsource, detection and condition; the search answer is forbidden from claiming a match. 'create a rule for mimikatz' without the word Sigma is an ordinary question again.",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.13.1",
       "date": "2026-09-24",
       "appOnly": true,
