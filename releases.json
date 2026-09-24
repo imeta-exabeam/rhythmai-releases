@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.13.3",
+      "date": "2026-09-24",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Asked to create an AIE or detection rule without a Sigma rule to convert, RhythmAI now says that it does not yet build one from an event or a description in chat and offers the two ways to get one today, instead of writing a rule in a format LogRhythm does not have",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Found on dev after 1.13.2: with the Sigma routes correctly out of the way, 'Create an AIE rule that detects this' with a pasted Sysmon event fell to the model, which invented an AIE rule as XML. Such a request is now answered by the app: RhythmAI does not yet build an AIE rule from an event or a description in chat (that is the next release); today, paste a Sigma rule and it is converted and offered on a card, or ask for a bundled Sigma rule by name or MITRE technique with the word Sigma. When an event was pasted, the answer names the behaviour it shows so the analyst knows what to ask for.",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
       "version": "1.13.2",
       "date": "2026-09-24",
       "appOnly": true,
