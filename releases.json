@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.18.0",
+      "date": "2026-09-25",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The suggested-question rows behind the LogRhythm MCP chip and the LR-MCP tags on follow-up suggestions are removed; the plain follow-up suggestions under an answer are as they were before 1.14.0",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Removed: the question rows offered when the LogRhythm MCP chip is clicked, the LR-MCP tag on follow-up suggestions, the suggestion bank and its section in the diagnostics bundle. The chat's follow-up suggestions and the opening suggestions are unchanged from 1.13.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
       "version": "1.17.0",
       "date": "2026-09-25",
       "appOnly": true,
