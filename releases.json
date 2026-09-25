@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "version": "1.19.0",
+      "date": "2026-09-26",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "A time span in an alarm question (last 24 hours, today, yesterday, last 7 days) now bounds the LogRhythm alarm list the assistant fetches, and the headline count is the bounded list's own count",
+        "An alarm investigation shows identical drilldown events once with their count instead of one row per copy, and the loop guard no longer cuts a report for listing them",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Alarm questions with a time span: the assistant sends the span as the alarm list's date bound (the planner is told the current time and the app fills a missing bound from the question's words), so \"alarms in the last 24 hours\" fetches that window rather than the newest 500 alarms of all time, and the answer's count is the fetched count, never model arithmetic over per-day figures.",
+        "Alarm investigation: identical drilldown events (same fields, same millisecond, as a brute-force burst or the Echo test source produces) are collapsed to one entry with an x-count before the model sees them, the report shows them once with the count, and the runaway guard tolerates identical rows up to that count while still stopping a real loop.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
       "version": "1.18.0",
       "date": "2026-09-25",
       "appOnly": true,
