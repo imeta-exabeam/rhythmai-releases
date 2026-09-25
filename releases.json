@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "version": "1.17.0",
+      "date": "2026-09-25",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Install packages 2.0.0 for Windows and Ubuntu: a fresh install and an upgrade in place run the same update script; the 32 GB GPU minimum and the driver gate stop the run before anything long; the shipped .env stays the site's configuration",
+        "Update scripts 2.2.1 (Windows) and 2.0.1 (Ubuntu): the compose project comes from COMPOSE_PROJECT_NAME in .env when no app container is running, so a site that was taken down before the update is updated in place rather than duplicated",
+        "App-only: one click on Settings > Updates; Ubuntu sites refresh the script once from the image."
+      ],
+      "highlights": [
+        "Install packages 2.0.0 (RhythmAI-<version>-Installer.zip for Windows, RhythmAI-<version>-Ubuntu-Installer.tar.gz for Ubuntu): the bootstrap checks Docker, the GPU (32 GB minimum) and the driver, prepares the folder and the shipped .env (the GPU inventory and the LogRhythm lines appended only when missing), extracts the reference compose and the update script from the pinned image, and hands off to the update script with -Tier auto; a folder that already holds a site is upgraded in place with its backup. Uninstallers know every container and volume of the current stack and remove only the site's own project. The diagnostics collectors download the in-app bundle when the app answers and gather redacted host facts when it does not. Every package carries a MANIFEST.txt with the sha256 of each member.",
+        "Update-RhythmAI.ps1 2.2.1 and update-rhythmai.sh 2.0.1: the compose project is read from the running app container's label, then from COMPOSE_PROJECT_NAME in .env, then the default rhythmai.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image; Ubuntu: refresh the script once: docker run --rm --entrypoint cat rhythmai/rhythmai:latest /app/deploy/update-rhythmai.sh > update-rhythmai.sh"
+      ]
+    },
+    {
       "version": "1.16.0",
       "date": "2026-09-25",
       "appOnly": true,
