@@ -1,6 +1,24 @@
 {
   "releases": [
     {
+      "version": "1.22.0",
+      "date": "2026-09-26",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Ask for an AIE rule for a common attack by name (phishing, Mimikatz, exfiltration, lateral movement, ransomware) and RhythmAI offers the matching detections from its bundled SigmaHQ set to build by number, before it tries to draft one",
+        "The audit trail of LogRhythm tool calls carries the status, the record count, the analyst's roles, and the reason a draft or a call was refused",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Rule from a description: a create-rule ask that names a threat rather than pasting a rule or an event now searches the bundled SigmaHQ detections first and offers the best matches by number; reply with the number and the rule is converted and offered on the Create rule card as before. Nothing is claimed to be an exact match; when the set holds nothing for the words (authentication patterns such as brute force are not in the bundled endpoint set) the answer says so and names the other ways.",
+        "Audit: each siem.tool record now carries the LogRhythm status and the record count; the plan record carries the reasons a draft was rejected or the detail the assistant asked for; every record carries the analyst's roles.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
       "version": "1.21.0",
       "date": "2026-09-26",
       "appOnly": true,
