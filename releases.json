@@ -1,6 +1,25 @@
 {
   "releases": [
     {
+      "version": "1.20.0",
+      "date": "2026-09-26",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "When a LogRhythm tool needs a detail the question does not carry (an alarm id, a case number, a host), the assistant asks for it instead of answering without the tool or guessing a value",
+        "AIE rules are only ever built by the app from a Sigma rule or a drafted detection; the raw create and update rule tools are no longer offered as write proposals, and the drafting route now works on the coverage surface too",
+        "The generic write card shows object arguments as JSON instead of a placeholder",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Honest tool use: a planned tool call whose required argument is missing from the question, or whose id-like argument does not appear in the question or the open context, is never run with a guess; when nothing else can run, the answer is a short request for that detail, naming the tool and the argument as its own schema describes it.",
+        "Rule creation on the coverage surface: a create-rule ask (for example \"Create AIE rule to detect Mimikatz\") goes through the same draft, ground, evaluate and convert path as the investigation chat and offers the real Create rule card, or the honest answer when nothing grounds; the raw create_aie_rule and update_aie_rule tools are recipe-only and never appear as generic write proposals.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
       "version": "1.19.0",
       "date": "2026-09-26",
       "appOnly": true,
