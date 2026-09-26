@@ -1,6 +1,23 @@
 {
   "releases": [
     {
+      "version": "1.21.0",
+      "date": "2026-09-26",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "A Help section inside the app: how RhythmAI works in plain English, with search, diagrams, and the limits and caps taken from the code itself",
+        "First two articles: how RhythmAI works, and the LogRhythm tools; more follow in the next releases",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Help: a Help card on the home page, a ? in the top bar that opens the article for the page you are on, /help with a search box that ranks titles, headings and sentences, and diagrams drawn in the app's own colours. Every number an article quotes is filled from the code and the configuration defaults at build time, and every article names the release that verified it.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
       "version": "1.20.0",
       "date": "2026-09-26",
       "appOnly": true,
