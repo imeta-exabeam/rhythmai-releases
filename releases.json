@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.23.1",
+      "date": "2026-09-27",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "AI Engine rule questions no longer stop to ask for the engine id: the app fills it (engine 1) the way LogRhythm's own tools advise, so \"list the AIE rules for phishing\" runs at once",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Found on the Demo right after its upgrade to 1.23.0: with the LogRhythm tools on, a rule listing on Rhythm Insights answered \"I need one more detail: engine_id\". LogRhythm does not expose an engine list over its API and its own tool says to try engine 1, so the app now fills that value itself, both when the planner omits it and when it declares it missing, and the planner is told never to ask for it.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
       "version": "1.23.0",
       "date": "2026-09-27",
       "appOnly": true,
