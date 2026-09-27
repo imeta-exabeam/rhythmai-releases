@@ -1,6 +1,22 @@
 {
   "releases": [
     {
+      "version": "1.23.2",
+      "date": "2026-09-27",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The answer check no longer flags a correct rule or log listing because the answer also mentions a log source at \"0 logs/24h\": a rate is not a claim that nothing was found, and an answer that names the returned records is never contradicted",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Seen on the Demo after 1.23.1: a phishing rule listing that named all five returned rules got the line \"The answer above says none were found\" because it also noted a degraded log source at 0 logs/24h. The check now ignores rates and stands down whenever the answer visibly uses the records it was given; a real denial (\"I cannot search LogRhythm\") is still called out.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
       "version": "1.23.1",
       "date": "2026-09-27",
       "appOnly": true,
