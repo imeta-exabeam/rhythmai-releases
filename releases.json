@@ -1,6 +1,28 @@
 {
   "releases": [
     {
+      "version": "1.23.0",
+      "date": "2026-09-27",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "AIE rules the LogRhythm way: ask for a rule and RhythmAI offers the closest rules already in your SIEM to clone and adapt, keeping their blocks, thresholds and group-by; change the threshold, the window, a filter value or the risk in words or on the card before it is created",
+        "Tune an existing rule the same way: change the threshold on a rule you name and confirm on the card",
+        "Answers and the tool trace now say plainly that RhythmAI creates AIE rules through the universal Sigma-to-AIE converter, and the Help explains how rules get created",
+        "The Create rule, Update rule and Create case cards now appear after the answer text, not while it is still streaming",
+        "The Help card is hidden from the Home page until the Help section is complete",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Clone and adapt: \"Create an AIE rule for brute force attacks\" lists your own brute-force rules first (with their technique, block shape and threshold in words), then the bundled detections; picking one of yours fetches its full definition, keeps every block, threshold and group-by, changes only the name, the description and what you asked for, shows the source and the exact differences on the card, and creates on confirm. Group-by is locked on the card because changing it changes the rule's logic.",
+        "Edits in words or on the card go through one validator: a threshold only on a threshold block and within range, a window within range, a filter value that fits the field's type, a risk from the SIEM's own list; anything else is refused with the reason shown.",
+        "Tune: \"change the threshold on <rule> to 20\" builds the same card on the existing rule and applies on confirm; the audit names the rule and the changed keys.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
       "version": "1.22.0",
       "date": "2026-09-26",
       "appOnly": true,
