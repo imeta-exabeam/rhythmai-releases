@@ -1,6 +1,75 @@
 {
   "releases": [
     {
+      "version": "1.23.6",
+      "date": "2026-10-05",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Settings > MCP gains a \"Sample prompts\" page: a bank of prompts run against a LogRhythm 7.26 SIEM with the tools on, each with a copy button and chips for the windows it runs in",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "What an analyst sees: the LogRhythm tools card on Settings > MCP has a \"Sample prompts\" button. It opens a page of prompts grouped by scenario, each in its own block with a Copy button, a line on what to expect, and chips naming the windows it runs in: Rhythm Insights, Alarm Investigation and Rhythm Universe. A jump box at the top right lists the sections and scrolls to each. A prompt whose card creates or closes something in LogRhythm carries a \"Writes to the SIEM\" mark, so nobody pastes it by accident.",
+        "How the bank is maintained: it ships with each release and grows over time. It holds only prompts that ran on a real SIEM, or shipped flows that have their own acceptance test, so every prompt on the page has been seen to work.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
+      "version": "1.23.5",
+      "date": "2026-10-05",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The LogRhythm tool planner is tidier with the arguments it sends: it reads the accepted values from more of the ways a tool describes them, shows LogRhythm's own refusal sentence so the second attempt can fix the argument, and turns a sort word such as \"name\" or \"updated\" into the API's field name",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "What an analyst saw: \"Which log sources are unhealthy right now?\" in an alarm drawer failed, because the planner filtered the log source list on a status called \"unhealthy\" and LogRhythm refused it; the tool describes its three accepted statuses with slashes (active / retired / all), a wording the planner did not read. It now reads that wording and the \"a, b or c\" wording too, so an unlisted word is dropped, the list call runs, and the answer judges each source's health from its last-log date.",
+        "When LogRhythm refused an argument, the chat only said \"Bad Request\", so the planner's one correction round repeated the identical call. The refusal line LogRhythm sends (for example that a status must match one of the listed values) now reaches the planner, and the second attempt can correct or remove the argument.",
+        "\"Sorted by name, newest updated first\" produced an unsorted list, because the word the planner used for the sort was not the API's field name. Name, updated (last updated, modified), id, status, group and priority now map to the API's own fields (ruleName, dateUpdated, ruleId, ruleStatus, ruleGroup, runtimePriority), and a snake_case word such as date_updated matches the API's camelCase dateUpdated.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
+      "version": "1.23.4",
+      "date": "2026-10-05",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The LogRhythm tools now behave the same in every chat window: one tool catalogue and the Sigma routes everywhere, measured on the 400-question selection suite at 88.8 % against 88.5 % before",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "What an analyst sees: a rule question in an alarm drawer or on the AI Assistant page now lists rules, where it used to find no rule tool on those windows. A Sigma ask on the Coverage window (\"create a sigma rule for T1055\") offers the bundled rules and converts on a card, instead of matching nothing and improvising an answer. Every window carries the same LogRhythm tools; what differs is only the context loaded into it (an alarm, a coverage report, the Universe).",
+        "How it was measured: the 400-question selection suite on the dev vLLM engine gave 88.5 % (expected tool present) for the old per-window catalogues, 85.0 % for a unified catalogue with descriptions shortened to fit the old budget, and 88.8 % for the unified catalogue with full descriptions. Shortening the descriptions, not the number of tools, cost the precision (it erases \"search logs\" from \"search logs by classification\"), so the planner keeps full descriptions and its token budget is raised to hold them.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
+      "version": "1.23.3",
+      "date": "2026-10-03",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "A long coverage report request no longer gets mistaken for a request to write a rule, and an AI Engine rule listing no longer fails when the question says \"active\" or asks for a sort the API does not offer: the app reads the verb and the rule phrase together, reads each tool's accepted values from its own description, and gives the planner one corrected call when LogRhythm refuses an argument",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "Seen on the Demo: a MITRE coverage prompt (\"Assess all active AI Engine detection rules and every alarm triggered in the last seven days ... rules that generated a high volume of alarms ...\") was sent to Sigma drafting because the word \"generated\" and the phrase \"detection rules\" sat in different clauses; no draft passed its checks and the chat answered that it had no access to the rule inventory. The create-rule check now requires the verb to govern the rule phrase (verb first, within eight words, in the same sentence), and a message that opens with an analysis verb such as assess, map, report, list or compare is never a create request. Real asks (\"write a detection rule for lsass dumping\", \"create a rule for mimikatz\") still match.",
+        "Found on the control run of the same prompt, then again on dev: the planner filtered the AI Engine rule list on the status \"Active\", and later asked for it sorted by \"alarm_count\" in direction \"desc\"; LogRhythm refused each, because a rule's status is one of enabled, disabled, suspended, learning, paused or varies, the sort fields are the API's own, and a direction is spelled ascending or descending. The sidecar states those lists only in each argument's description, so the planner now reads them from there for every tool: an analyst's word is mapped to the value the API spells (active, on, running and live to enabled; inactive and off to disabled; desc to descending), the exact names match in any case, and a value outside the list drops that one argument while the call still runs. When LogRhythm still refuses an argument, the planner is shown the refusal once and may call the same tool again with it corrected or removed.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
       "version": "1.23.2",
       "date": "2026-09-27",
       "appOnly": true,
