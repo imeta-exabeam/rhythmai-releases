@@ -1,6 +1,41 @@
 {
   "releases": [
     {
+      "version": "1.23.8",
+      "date": "2026-10-07",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "A Sigma request typed over two lines (one Shift+Enter) is no longer mistaken for a pasted document, so the bundled-rule offer appears again",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "What an analyst saw: typing \"Create a Sigma rule for lsass memory dumping\", pressing Shift+Enter, and finishing with \"on Windows servers\" got no offer of a bundled Sigma rule, as if none existed. A single line break was enough to make the chat treat the message as a pasted log or document and skip the catalogue. Line breaks now count only from three non-blank lines up; a pasted event, XML, JSON, key=value text or anything over 120 characters is still recognised as a paste and still never matched to the catalogue.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
+      "version": "1.23.7",
+      "date": "2026-10-05",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The chat no longer runs away on a list that only counts up, a zero claim beside rows LogRhythm returned is called out, and the risk rating reads \"High-Low (7 of 9)\" instead of the API's spelling",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "What an analyst saw: twice on the coverage window an answer ran to the length limit on a list that only counted up. One was a table of 118 invented rules that were identical except for a number at the end of each row; the other was a rule whose tag list ran on to 693. The check that stops a runaway answer missed both, because every line was different by one number. It now spots a long run of lines that differ only by their numbers and stops the answer there; a long table of genuinely different rows is not affected.",
+        "What an analyst saw: asked for the disabled AI Engine rules, LogRhythm returned 11 of them, yet the answer showed a table with \"Disabled 0\" and said no rules were turned off. The answer had leaned on the coverage data on screen, which holds only enabled rules, instead of the rows just returned. The chat now compares the answer with what the call returned: when LogRhythm sent back records for a filter such as disabled and the answer claims none, a note under the answer says so, naming the call and the count (for example \"LogRhythm returned 11 records for List AI Engine rules (rule_status=disabled)\").",
+        "What an analyst saw: after converting a Sigma rule, the chat sentence read \"Risk Rating (card): HighLow (7 of 9)\". HighLow is the spelling the LogRhythm API uses internally, not a name for people. The chat and the card now read \"High-Low (7 of 9)\", \"Medium-Medium (5 of 9)\" and so on across the nine ratings. The rule posted to LogRhythm is unchanged.",
+        "What an analyst saw: asked for the disabled AI Engine rules, LogRhythm returned 15 of them, yet the answer said the data \"does not include an enabled/disabled status field\", and on another day showed \"Disabled 0\" beside 11 rows. The table the chat read had dropped the rule name and the very status column the call filtered on. The rule name and the column the call filtered on are now always in the table the chat reads, so the answer can name each rule and see its status.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
       "version": "1.23.6",
       "date": "2026-10-05",
       "appOnly": true,
