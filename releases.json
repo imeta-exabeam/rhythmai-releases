@@ -1,6 +1,38 @@
 {
   "releases": [
     {
+      "version": "1.23.10",
+      "date": "2026-10-23",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The AI assistant and alarm-investigation panel now lets you scroll up and read earlier text while an answer is still streaming",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "What an analyst saw: while an investigation or chat answer streamed in, scrolling up to re-read earlier text (for example the Executive Summary) was snapped back to the bottom on every new token, so the page could not be read until the answer finished. The same happened in the Chrome extension side panel, which shows this panel. The view now keeps following the answer only while you stay at the bottom. Scrolling up by mouse wheel, touch, scrollbar or keyboard stops the following at once and the view stays where you put it while the answer keeps streaming. Scrolling back to within about 40 px of the bottom resumes following, and starting an investigation or sending a message always begins at the bottom.",
+        "Upgrade note: app-only. One click on Settings > Updates."
+      ]
+    },
+    {
+      "version": "1.23.9",
+      "date": "2026-10-08",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Rhythm Insights > Settings > Import rule logic works again: the upload now carries the login token",
+        "App-only: one click on Settings > Updates."
+      ],
+      "highlights": [
+        "What an analyst saw: choosing a rule-logic JSON file under Rhythm Insights > Settings > Import rule logic always ended with \"Failed to import rule logic\", on every site. The browser sent the upload without the login token, so the server refused it. The upload now uses the same authenticated request path as the rest of the app.",
+        "Upgrade note: app-only. One click on Settings > Updates installs the image."
+      ]
+    },
+    {
       "version": "1.23.8",
       "date": "2026-10-07",
       "appOnly": true,
