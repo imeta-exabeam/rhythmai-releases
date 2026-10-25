@@ -1,6 +1,270 @@
 {
   "releases": [
     {
+      "version": "1.23.23",
+      "date": "2026-10-25",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "The sample prompts window and the MCP tab's prompt bank lose the one-prompt Show the guard rails section.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "The prompt bank now holds 58 prompts in six sections; the removed prompt was 58, which listed AIE rules whose runtime priority is \"urgent\". Prompt numbers are unchanged"
+      ]
+    },
+    {
+      "version": "1.23.22",
+      "date": "2026-10-25",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "A rule or Sigma ask in the chat with the LogRhythm MCP switch off now gets a one-line reminder to enable the switch, instead of an answer that promised a rule card that never came.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "With the LogRhythm MCP chip disabled, asks such as \"Create AIE rule from Sigma php2shell\", a pasted Sigma rule, \"create it\", a check of your Sigma rules, a coverage ask or a rule change get one fixed sentence that says the switch is off and how to enable it; the model is not called for that message",
+        "Only in the alarm and Coverage chats, only when the LogRhythm tools are enabled in Settings and the analyst has the permission the chip needs; everything else answers as before"
+      ]
+    },
+    {
+      "version": "1.23.21",
+      "date": "2026-10-25",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Alarm investigations now carry the origin and impacted hosts the LogRhythm drill-down records, so host questions in the chat and the artifacts table no longer say the host is missing.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "The alarm sync keeps the host fields LogRhythm actually fills (impactedHost, impactedName, originHost, originName, the log source host, the entities and zones); the two fields it kept before are empty on current LogRhythm versions",
+        "Investigation summaries, the Important Artifacts table and the create-case and rule cards resolve the host from those fields",
+        "Alarms stored before this release get their hosts the first time they are opened in the chat: the drill-down is read again from the SIEM once and the stored copy updated",
+        "\"What other alarms fired on this host today?\" now has a host to work from"
+      ]
+    },
+    {
+      "version": "1.23.20",
+      "date": "2026-10-25",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Asking the chat to create a rule from a Sigma rule by name now reaches the catalogue however it is phrased, and your own Sigma rules are always offered when their title matches.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "\"Create an AIE rule from Sigma X\", \"using Sigma X\" and \"for Sigma X\" all search the catalogue and offer a numbered list; before, only \"for\" did and the others reached the model with nothing to pick from",
+        "Your own Sigma rules are offered on any title match, so an extra word in the ask (\"php2shell vulnerability\") no longer hides them",
+        "Every row of a numbered Sigma list names its source: SigmaHQ, your rule pasted in chat, or your rule uploaded",
+        "Offer lists number the rules already in your SIEM and continue the numbering on the Sigma rows, one per line, so the number you reply with is the one shown",
+        "The sample prompts window's Sections box has more space between entries"
+      ]
+    },
+    {
+      "version": "1.23.19",
+      "date": "2026-10-25",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "When the chat lists Sigma rules to pick from, your own rules are named as yours, and a list that mixes them with SigmaHQ's says so in its heading.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "Each numbered Sigma rule line says \"your rule, pasted in chat\" or \"your rule, uploaded\" when it is one of yours; the heading reads \"From SigmaHQ ... and your own Sigma rules\" for a mixed list and \"From your Sigma rules\" when they are all yours",
+        "A rule without a Sigma id shows \"no id\" instead of \"id unknown\"; a rule without a log source category shows its service or product instead",
+        "The footer line after a catalogue search now says RhythmAI searched its stored copy of SigmaHQ and your own Sigma rules",
+        "Picking one of your own rules by number from a coverage or rule-building offer resolves to the stored rule even when it has no Sigma id"
+      ]
+    },
+    {
+      "version": "1.23.18",
+      "date": "2026-10-25",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "A Prompts chip beside the LogRhythm MCP chip opens the sample prompts for the window you are in, and Use This places the prompt in the input for you to edit before sending.",
+        "The window stays inside the Chrome extension side panel at any width, with a Sections box, a jump strip on narrow panels and a back-to-top arrow.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "Prompts chip: shown only while the LogRhythm MCP chip is lit; it opens a window over a blurred page and never toggles the tools",
+        "The window lists the prompts that run in the current window (Alarm Investigation, the Chrome extension side panel, or Rhythm Insights), grouped with one emoji per section, each with its Expect line",
+        "Use This replaces the input with the prompt and closes the window; nothing is sent until you press send, and the window can be opened again at once",
+        "Settings > MCP > Sample prompts: one emoji per section and the same prompt bank; the sample prompt \"how do I create an AIE rule\" is removed",
+        "The prompt bank no longer refers to our development or demo environment anywhere"
+      ]
+    },
+    {
+      "version": "1.23.17",
+      "date": "2026-10-24",
+      "appOnly": false,
+      "servicesChanged": [
+        "app",
+        "lrsiem-mcp"
+      ],
+      "summary": [
+        "RhythmAI now keeps every Sigma rule it knows, SigmaHQ's and your own, in its database with the converter's verdict and the AI Engine rules created from it.",
+        "LogRhythm's converter judges the whole non-Windows SigmaHQ tree: Linux audit and file events, web server access logs, AWS CloudTrail, Okta, Azure, GCP and Office 365 rules convert when LogRhythm parses the fields, and everything else is refused by name.",
+        "Paste or upload your own Sigma rules and ask the chat to check them against your AI Engine rules.",
+        "App and sidecar change: run the update script once (the lrsiem-mcp sidecar moves to 0.7.0-3); this is not a one-click update."
+      ],
+      "highlights": [
+        "Sigma rules live in Postgres (sigma_rules), not in files on the data volume; an existing live copy is imported once on first start",
+        "Your Sigma rules: a new card under MCP to upload .yml, .zip or .tar.gz files, with each rule's verdict and the AI Engine rules created from it",
+        "Check my Sigma rules: the chat lists your rules, verifies their AI Engine rules live and offers to create the missing ones",
+        "Converter 0.7.0-3 scopes Linux auditd, Linux file events, web server access, proxy, AWS CloudTrail, Okta, Azure, GCP audit and Office 365 rules by Log Source Type, with field maps read from the Knowledge Base",
+        "A Sigma |all condition is now ANDed as written; rules that silently ORed it before (Windows included) are converted correctly or refused",
+        "A rule whose logsource LogRhythm has no type for is refused with the reason, and a paste made while the LogRhythm MCP sidecar is down is saved and judged later",
+        "Upgrade note: app and sidecar change. Run the update script once; one click does not carry a sidecar change."
+      ]
+    },
+    {
+      "version": "1.23.16",
+      "date": "2026-10-24",
+      "appOnly": false,
+      "servicesChanged": [
+        "app",
+        "lrsiem-mcp"
+      ],
+      "summary": [
+        "A pasted Sigma rule for Linux process creation or for the PHP and Apache error log now converts: the AI Engine rule is scoped by Log Source Type, the way LogRhythm's own rules are, and two PHP2Shell detections join the Detection engineering sample prompts",
+        "When a condition cannot be expressed in LogRhythm, the card says what was substituted and why; nothing is dropped silently",
+        "App and sidecar change: run the update script once (the lrsiem-mcp sidecar moves to 0.7.0-2); this is not a one-click update."
+      ],
+      "highlights": [
+        "Sigma beyond Windows, first step: LogRhythm's converter, as shipped in RhythmAI's sidecar, knew Windows log sources only, so every Linux, macOS or application Sigma rule was refused, including every non-Windows rule in the live SigmaHQ copy. The sidecar now scopes a rule by Log Source Type (Knowledge Base ids, the same on every install) for Linux process creation (the Linux audit log sources, SYSCALL records) and for PHP and Apache error logs, where the message text maps to Subject. The rest of the non-Windows tree follows in a later release.",
+        "PHP2Shell: two new Detection engineering sample prompts create AI Engine rules for the PHP2Shell vulnerability (CVE-2026-109618) from the public Sigma rules, a PHP worker spawning a shell or download tool, and PHP memory corruption indicators in the error log.",
+        "Stated substitution: LogRhythm does not parse the parent process from Linux audit logs. A Sigma rule whose parent is a web server or PHP worker becomes a filter on the service account it runs as (www-data, apache, nginx, http or nobody), and the card carries a Substituted line with the reason. Any other parent condition is refused with the reason, never dropped.",
+        "The card and the answer name the log source types a rule is scoped to and every filter in LogRhythm's words (Account, Subject, Object).",
+        "The daily SigmaHQ pull re-judges every rule with the new converter, so Linux process-creation rules that fit start to appear in RhythmAI's copy.",
+        "Upgrade note: app and sidecar change. Run the update script once; one click does not carry a sidecar change."
+      ]
+    },
+    {
+      "version": "1.23.15",
+      "date": "2026-10-24",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "In an alarm's drawer, \"show me this alarm's rule logic\" now pulls the AI Engine rule that raised the alarm, by the rule id RhythmAI stored with it, and describes its blocks and filters; an alarm id is no longer mistaken for a rule id",
+        "The create-case card always carries an investigation summary and a priority from the alarm's RBP, questions about optional filters no longer stop to ask, and a LogRhythm result is never shown as raw tool-call text",
+        "App-only: one click on Settings > Updates from 1.23.11 or later; a site still on 1.23.10 or older first runs the update script once, for the sidecar change that 1.23.11 carried, then one click."
+      ],
+      "highlights": [
+        "Rule logic from the alarm: RhythmAI stores every alarm's AI Engine rule id, and the alarm drawer now hands it to the planner. \"Show me this alarm's rule logic\", \"how does this rule work\" and \"show me the AIE rule of this alarm and propose tuning\" fetch that rule and answer from its blocks. The alarm record's alarmRuleID is a different number and is never sent as a rule id.",
+        "Create-case card: when the answer refuses or talks about the card instead of summarising, the case summary and note are built from the alarm record and its drilldown fields, never from that text. The priority comes from the alarm's RBP (69 gives High) when the drawer did not pass a risk score.",
+        "Optional filters never block an answer: when the planner says a listing needs a value the question did not give and that value is an optional filter, such as entity name on list alarms, RhythmAI runs the listing without it instead of asking.",
+        "Tool-call text never reaches the analyst: a model that writes a tool call where its answer should be has that text removed, and the records each tool returned are stated in one sentence instead.",
+        "False positive probability and environmental dependency sort on LogRhythm's nine-step scale, Low-Low to High-High, so \"which rules have the highest FPP\" lists the High-High and High-Medium rules first; the results tell the model that HighLow is step 7 of 9, not two values.",
+        "A filtered page says what it filtered: a rule, alarm or case list fetched with a name or status filter opens with the filter and the note that records outside it are not in the list, so a three-rule page is never read as the whole SIEM. A log search that hit its cap states the match count and the page size as two numbers.",
+        "Tool cards: a single record such as Get alarm no longer shows \"0 records\", and empty fields in a result (the sidecar's blank Error field) are not drawn.",
+        "Sample prompts: \"Show me this alarm's rule logic\" joins the alarm investigation rows.",
+        "Upgrade note: app-only. One click on Settings > Updates from 1.23.11 or later. A site still on 1.23.10 or older first runs the update script once, for the sidecar change that 1.23.11 carried, then one click."
+      ]
+    },
+    {
+      "version": "1.23.14",
+      "date": "2026-10-24",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "RhythmAI now keeps a live copy of the SigmaHQ rules, refreshed daily from the whole rules tree: 1,319 rules convert to AI Engine rules today, against 1,094 in the old bundled copy",
+        "Ask \"check Sigma for X\" or \"X is on the rise, are we covered\" in any chat window and RhythmAI lists your closest existing AI Engine rules, then the SigmaHQ detections it can build, with the date of the copy it searched",
+        "App-only: one click on Settings > Updates from 1.23.11; a site still on 1.23.10 or older first runs the update script once, for the sidecar change that 1.23.11 carried, then one click. The first Sigma pull runs five minutes after the app starts and needs https access to codeload.github.com, or a mirror set on the Sigma rule feed card; without it the bundled copy stays in use."
+      ],
+      "highlights": [
+        "Sigma rule feed: a background job downloads the SigmaHQ archive once a day, reads every rule under the rules folders and asks LogRhythm's own converter which ones it can turn into AI Engine rules. Only new or changed rules are checked again, and a run that does not finish never replaces the copy in use. Placeholder rules, which need site values filled in first, are left out, and today only Windows rules convert.",
+        "Settings > MCP > Sigma rule feed: shows the SigmaHQ date of the copy, when it was last checked, how many rules are usable and how many are not convertible, the next check and the last outcome, with a Stale badge and its reason when the copy is behind. Enable or disable the daily refresh, change the interval (1 to 168 hours) or the source URL, Refresh now, or import a SigmaHQ archive or a live.json built elsewhere on a site without internet access.",
+        "Coverage questions: \"X is on the rise, are we covered\", \"do we detect X\" and \"are we covered for X\" list the closest AI Engine rules you already have, then the SigmaHQ detections RhythmAI can build, and offer to build one. A Sigma search now uses only the threat phrase, so a long sentence no longer dilutes it.",
+        "Freshness in every Sigma answer: answers name the copy they searched, such as \"SigmaHQ as of 2026-10-24, checked 3 hours ago (live copy)\". When the copy is older than six hours and the network is up, chat refreshes it first within 20 seconds, otherwise it answers from the copy and says so.",
+        "Safety: the feed downloads over https only, refuses loopback, link-local and cloud metadata hosts, checks every redirect again, and limits the archive size, the number of files and the size of each rule. Rules are read as data and nothing in the archive is run.",
+        "Sample prompts: four new Detection engineering rows show the coverage questions and the pick that builds a rule from a SigmaHQ detection.",
+        "Upgrade note: app-only. One click on Settings > Updates from 1.23.11. A site still on 1.23.10 or older first runs the update script once, for the sidecar change that 1.23.11 carried, then one click. The first Sigma pull runs five minutes after the app starts and needs https access to codeload.github.com, or a mirror set on the Sigma rule feed card; without it the bundled copy stays in use."
+      ]
+    },
+    {
+      "version": "1.23.13",
+      "date": "2026-10-24",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Investigation questions that chain LogRhythm reads now get the right records: alarms by AI Engine rule name, logs by everyday classification names (failed logons, account modification), alarm status by name, and an empty filtered list read as \"nothing matched the filter\", not \"nothing exists\"",
+        "Write cards and the answer agree: on an open alarm the answer says the card below holds the comment, close or case and nothing changes until you confirm it; asking whether a case already exists no longer raises a create-case card, and a case summary no longer starts with a refusal",
+        "App-only: one click on Settings > Updates from 1.23.11; a site still on 1.23.10 or older first runs the update script once, for the sidecar change that 1.23.11 carried, then one click."
+      ],
+      "highlights": [
+        "Alarms by rule name: LogRhythm names an AI Engine rule's alarms \"AIE: <rule>\", so a list of alarms filtered by the bare rule name came back empty. When that happens RhythmAI asks once more with the prefix, lists the change among the plan's adjustments and shows the updated plan. On the dev SIEM the bare name returned 0 alarms and the prefixed name 387.",
+        "Classification names: RhythmAI now carries LogRhythm's 42 classifications with common phrasings (account modification is Account Modified, failed logons is Authentication Failure), so a log search by classification no longer fails with \"no classification matches\". Six short names that are part of longer ones (Malware, Attack, Suspicious, Misuse, Activity, Denial Of Service) are sent as their full names, such as Security/Malware.",
+        "Create-case cards only when asked: a create word must be followed within four words by \"case\" or \"ticket\", in a sentence that is neither negated nor a question about an existing case. \"Is there already a case for this alarm? I don't want to open a duplicate.\" now gets an answer and no card.",
+        "Alarm status by name: alarm lists of 10 rows or more show the status name (New, Opened, Working, Closed: False Alarm and so on) instead of its number, so status 0 is no longer described as Opened.",
+        "Empty filtered lists: a filtered list that returns no records now reads \"0 records matched the filter (engine_id=1, rule_status=disabled); this says nothing about records outside the filter\", so zero disabled AI Engine rules is no longer reported as no AI Engine rules at all.",
+        "Write cards and the answer: on an open alarm the answer knows a card follows (add a comment, close the alarm, create a case) and says the card holds the change and nothing happens until it is confirmed, instead of saying it cannot add comments or create cases. The create-case card's summary and note leave out such sentences, so a case summary never begins with a refusal.",
+        "Upgrade note: app-only. One click on Settings > Updates from 1.23.11. A site still on 1.23.10 or older first runs the update script once, for the sidecar change that 1.23.11 carried, then one click."
+      ]
+    },
+    {
+      "version": "1.23.12",
+      "date": "2026-10-24",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Settings > MCP > Sample prompts gains 15 investigation-workflow prompts: each asks for two or three LogRhythm reads in one message, the way a shift actually works, and each was replayed on a LogRhythm 7.26 SIEM",
+        "Six of them run on an open alarm (triage, compare two alarms, MITRE tactic, related account activity, an existing case); nine run in any window (start-of-shift briefing, alarm queue, brute force, account activity, lateral movement, case load, a case's evidence and history, PowerShell rules, topology)",
+        "App-only: one click on Settings > Updates from 1.23.11. A site still on 1.23.10 or older first runs the update script once, for the sidecar change that 1.23.11 carried, then one click."
+      ],
+      "highlights": [
+        "Investigation workflows: a new section, 2. Investigation workflows, holds nine prompts for any window that ask for two or three LogRhythm reads in one message, for example a start-of-shift briefing (New alarms, top rules in the last 24 hours and the SIEM API health check in one plan) or a case-load review (cases created in the last 7 days and open cases with no update for 3 days). The planner runs the reads together, at most three per question, and the footer lists every call behind the answer.",
+        "Alarm investigation: six more prompts on an open alarm, between the reads and the two write prompts: triage with the events and the day's alarms, a triage verdict that includes the rule's false-positive probability, a comparison with another alarm, the MITRE technique and tactic with the other alarms from that tactic, related Authentication Failure and Account Modified events, and whether a case already covers the alarm or its rule. They run in the Chrome extension side panel too, which shows the same panel.",
+        "Measured, not written from memory: every new prompt was replayed on a 7.26 SIEM with the lrsiem-mcp sidecar 0.7.0-1 and the AI Engine API present, and each row says what came back and how long it took. Wording that the replay showed to fail was changed before the row went in: LogRhythm's classification names (Account Modified, Account Created) instead of descriptions, \"Windows Command Shell\" instead of \"command-line\", and \"Open case\" so the case itself is read along with its evidence and history.",
+        "The page now holds 52 prompts in seven sections. The prompt numbers changed; the write prompts are 14, 15, 44, 46 and 48, and the page's rule about them is computed from the prompts themselves.",
+        "Upgrade note: app-only: one click on Settings > Updates from 1.23.11. A site still on 1.23.10 or older first runs the update script once, for the sidecar change that 1.23.11 carried, then one click."
+      ]
+    },
+    {
+      "version": "1.23.11",
+      "date": "2026-10-24",
+      "appOnly": false,
+      "servicesChanged": [
+        "app",
+        "lrsiem-mcp"
+      ],
+      "summary": [
+        "LogRhythm MCP moves to LogRhythm's lrsiem-mcp 0.7.0: two new tools (add an alarm comment, a minimal AI Engine rule template), rule templates with pre-flight checks before a rule is created, and a working AI Engine restart tool",
+        "The sidecar now finds the AI Engine API again when it comes back, and tool results keep the columns an analyst asks about: last log date and status for log sources, false-positive probability for AI Engine rules, case status",
+        "Settings > MCP > Sample prompts rebuilt: 37 prompts in six sections, Alarm investigation first, each one replayed against a LogRhythm 7.26 SIEM",
+        "Not app-only: the lrsiem-mcp container image changes. Run the update script once; one-click is refused for this release because the compose file changed."
+      ],
+      "highlights": [
+        "What an analyst saw: a sidecar that started while the AI Engine API was down served its tools without the AI Engine and Sigma ones for hours, so every rule prompt answered empty until the container was restarted. Asking about log sources by last log date or AI Engine rules by false-positive probability answered that no such field existed, because the results dropped those columns. A search for a host's logs failed with \"only valid for Grouped filters\".",
+        "lrsiem-mcp 0.7.0 (build 0.7.0-1): two new tools, add_alarm_comment and get_minimal_aie_rule_template; AI Engine rule templates with a built-in fallback and pre-flight validation when a rule is created; the AI Engine restart tool works for the first time; lists carry their owner field; JWT parsing. RhythmAI's own patches carry forward: read tools return LogRhythm's error message instead of a bare failure, and sort, direction and status values are declared as fixed choices so the planner sees them. 85 tools on 7.26 with the AI Engine API, 74 without.",
+        "AI Engine re-probe: when the AI Engine API is not reachable at start, the sidecar tries again after 30, 60, 120 and 300 seconds and then every 5 minutes, and adds the AI Engine and Sigma tools as soon as it answers. No container restart is needed.",
+        "Result columns: log sources keep last log date and status, AI Engine rules keep false-positive probability and status, cases keep their status (nested names such as status.name become a statusName column). Columns that hold the same value on every row and foreign ids no longer crowd them out.",
+        "Planner: it never sends a raw LogRhythm filter tree, which the Search API rejected; host and user names go into the search keyword. The health check tool can be asked for (\"Is the SIEM API reachable?\"), and \"open cases\" maps to LogRhythm's Created status.",
+        "Settings > MCP > Sample prompts: 37 prompts in six sections with Alarm investigation first. Every prompt was replayed on a 7.26 SIEM on 2026-10-23 or belongs to a shipped flow with its own acceptance test; rows that produced nothing or did not use the MCP tools were removed. The close-alarm card now says plainly that it does not send a comment.",
+        "Upgrade note: NOT app-only. Run deploy/update-rhythmai.sh or Update-RhythmAI.ps1 once; it replaces the compose and recreates the app and the lrsiem-mcp container together (rhythmai/lrsiem-mcp:0.7.0-1). One-click on Settings > Updates is not available for this release. The API token and the container's .env lines are unchanged."
+      ]
+    },
+    {
       "version": "1.23.10",
       "date": "2026-10-23",
       "appOnly": true,
