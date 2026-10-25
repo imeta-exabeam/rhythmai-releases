@@ -1,6 +1,21 @@
 {
   "releases": [
     {
+      "version": "1.23.24",
+      "date": "2026-10-26",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Prompt library: users save their own prompts beside the shipped ones, private or shared.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "The Prompts window shows the shipped prompts and your own in the same sections; Settings, MCP, Prompt library lists the shared ones for administrators"
+      ]
+    },
+    {
       "version": "1.23.23",
       "date": "2026-10-25",
       "appOnly": true,
