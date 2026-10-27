@@ -1,6 +1,23 @@
 {
   "releases": [
     {
+      "version": "1.23.26",
+      "date": "2026-10-28",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Edits made on a clone or tune card now reach LogRhythm.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "When you change the name, risk, threshold, window or a filter value on a clone or tune card before pressing Create rule or Apply change, LogRhythm now receives those edits.",
+        "Until 1.23.25 the card and the server disagreed on where the edits travelled, so the unedited rule was written without a message.",
+        "The server accepts both shapes, so a page cached from 1.23.25 keeps working after the update."
+      ]
+    },
+    {
       "version": "1.23.25",
       "date": "2026-10-27",
       "appOnly": true,
