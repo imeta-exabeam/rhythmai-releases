@@ -1,6 +1,26 @@
 {
   "releases": [
     {
+      "version": "1.23.25",
+      "date": "2026-10-27",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Web research: ask the chat to search the internet; it reads a few pages and answers with numbered sources.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "Ask the chat to search the web, look online, or for the latest news on a threat, or press the new Web chip beside the MCP chip for one turn. The assistant checks the ask is about security, searches, reads up to four pages and writes an answer with numbered sources listed under the reply.",
+        "The step list shows what is happening live: Checking the ask, Searching, Reading, Writing the answer. Each source is a link with its site and date. Pages that cannot be read are listed by title and link.",
+        "Internal names stay inside: IP addresses, hostnames under your listed customer domains and user names are removed from every search query before it leaves the install, and only the redacted queries are audited.",
+        "Settings, MCP, Web research: an administrator enables it, saves the Brave Search API key (never shown again), lists the customer domains and runs a test search. New permission Web research, granted to Admin only. Twenty research turns per user per hour.",
+        "Off by default. Without the key or the permission, a research ask gets one fixed sentence that points to Settings.",
+        "Upgrade: app only, one click. The new permission is added to the Admin role on upgrade; grant it to other roles under Users, Roles if wanted."
+      ]
+    },
+    {
       "version": "1.23.24",
       "date": "2026-10-26",
       "appOnly": true,
