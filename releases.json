@@ -1,6 +1,130 @@
 {
   "releases": [
     {
+      "version": "1.23.33",
+      "date": "2026-11-08",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Attack Graph: an investigation answer, in the side panel and in the app, gains a View Attack Graph button that draws the alarm with its artifacts and related alarms on a compact Rhythm Universe canvas, for a lone alarm too; clicking a node opens its details, and Open in Rhythm Universe lands on the whole universe with the alarm selected and the filters open.",
+        "The graph's Expand from Data Indexer pulls logs over the 24 hours either side of the alarm instead of the last 48 hours, and the values it finds are listed under From logs with their own count.",
+        "The web research coverage card says in plain words why a technique is partial, and defines Partial beside Covered.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "The Attack Graph is the Rhythm Universe canvas at panel size: alarms on top, artifacts below, hub artifacts that connect dozens of alarms named in one sentence with a Show their alarms action, and rows in the summary panel that light their node on hover.",
+        "A click on a node now opens it even when the browser reports a few pixels of hand movement during the press; the same fix applies to the full Rhythm Universe page, where clicks had stopped opening nodes.",
+        "Data Indexer pulls anchored on the alarm's window are not cached, so a second pull for the same value over a different window reads the Data Indexer again.",
+        "Upgrading changes no settings; the Chrome extension is unchanged at 1.3.0."
+      ]
+    },
+    {
+      "version": "1.23.32",
+      "date": "2026-11-06",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Prompt capture: Settings > Audit & Telemetry gains a Capture prompts switch, off by default; when enabled the chat.query audit event carries the analyst's question, with credential values in name=value or header form, tokens and private keys redacted before writing; a secret written in plain prose is not detected.",
+        "Syslog over TCP now carries lines up to 4096 bytes so a captured question reaches the SIEM whole; UDP keeps the 900-byte datagram cap.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "Capture prompts writes each analyst question into the audit trail, in the local file and over syslog when forwarding is enabled; off means only the question length is recorded, and answers are never written.",
+        "Credential values in name=value or header form (password=, \"token\":, Authorization: Basic or Bearer), JWTs, AWS, GitHub and Slack key formats and private keys in a question are replaced with [redacted]; a secret written in plain prose is not detected, and hashes, IP addresses and alarm ids are kept as written.",
+        "Upgrading keeps prompt capture off until an administrator enables it; existing syslog settings are unchanged."
+      ]
+    },
+    {
+      "version": "1.23.31",
+      "date": "2026-10-30",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Charts in the chat: when an analyst asks for charts, the answer's tables that hold numbers are drawn as bar, line and pie charts above the tables, drawn by the app's own chart renderer.",
+        "The research writer and the assistant are told to tabulate for drawing, and the Help article explains charts.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "Ask for a chart, graph or diagram in English, Arabic, French or Spanish and the answer draws its number tables.",
+        "The table stays under every chart; every bar prints its value where there is room; a note names the rows and columns left out.",
+        "A Charts button under each answer shows or hides them."
+      ]
+    },
+    {
+      "version": "1.23.30",
+      "date": "2026-10-30",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "A site that runs or moves to the vLLM engine no longer downloads the Ollama 27B model."
+      ],
+      "highlights": [
+        "Preflight decides once whether the Ollama model step runs: on a site whose tier plan is vLLM, or that already runs vLLM, the Ollama 27B is not downloaded, not aliased and the old models are not removed; the disk check and the Ollama registry check follow the same decision.",
+        "A Tier-phase rollback states that Ollama does not have RhythmAI:27b and names the one command that fetches it: run the update script again with --tier ollama (-Tier ollama on Windows).",
+        "Update scripts 2.0.3 (Ubuntu) and 2.2.2 (Windows); installer package 2.0.2; installation guides rev 1.1 cover 1.23.29 and 1.23.30.",
+        "On a vLLM-eligible card the update no longer pulls the Ollama 27B: budget about 49 GB of free Docker disk for a 1.2.x upgrade on such a card and up to 2.5 hours; the Ollama tier is unchanged. To keep an Ollama 27B on a vLLM site, run the update script with --tier ollama."
+      ]
+    },
+    {
+      "version": "1.23.29",
+      "date": "2026-10-29",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Installer hardening: the update script finds its release metadata on hardened servers, the Ubuntu installer keeps an existing site's compose file, and a dropped SSH session no longer stops a run.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "The update script's release-metadata readers now run as the invoking user. On servers with a hardened umask (027 or 077) the readers could not open releases.json, so the script silently fell back to a full pull and skipped the model step; the targeted update and the model step now run as designed.",
+        "The Ubuntu installer keeps an existing site's docker-compose.yml, as the Windows installer already did, so the update script shows the differences, backs up the old file and then replaces it. A site with no compose file still receives the reference.",
+        "Both Ubuntu scripts ignore the hang-up signal, so a dropped SSH or PuTTY session no longer stops an install or update, and they print the log path to reconnect and follow. Update script 2.0.2, installer package 2.0.1. The Docker Hub model image is public, so no token is needed for any install."
+      ]
+    },
+    {
+      "version": "1.23.28",
+      "date": "2026-10-28",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "After a web answer the chat can check which affected products log to your SIEM and hunt the answer's indicators in your alarms.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "After a web answer the chat also offers Check exposure and Hunt indicators. Exposure checks whether the vendors and products the answer names log to your SIEM over the last twenty-four hours and seven days, host by host.",
+        "The hunt looks for the answer's IP addresses, domains, hashes and file names in your stored alarm drill-down logs over the hunt window, and links the alarms it finds. One hunt per user at a time.",
+        "The Web research settings card gains the hunt window and the check timeout. The research writer now names the ATT&CK technique id beside each technique and leaves the coverage verdict to the app."
+      ]
+    },
+    {
+      "version": "1.23.27",
+      "date": "2026-10-28",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "After a web answer the chat offers to check your detection coverage and carries each gap into a rule card.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "After a web answer the chat offers Check coverage for the ATT&CK techniques the answer named. The check reads your rule mappings, whether each rule is enabled, and whether it has data in the last seven days.",
+        "Each gap gets one action: review a disabled rule, create a rule from a Sigma rule your log sources can feed, or paste a Sigma rule you found. Nothing is written until you confirm the card.",
+        "Type create the second one, create all, or create all except a word, within fifteen minutes of the list."
+      ]
+    },
+    {
       "version": "1.23.26",
       "date": "2026-10-28",
       "appOnly": true,
