@@ -1,6 +1,28 @@
 {
   "releases": [
     {
+      "version": "1.23.35",
+      "date": "2026-11-14",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Alarms by user or host: with LogRhythm MCP on, ask for the alarms of a named user or host (\"show me all alarms where chuck is the user\", \"which alarms came from the IP address 203.0.113.13 this week?\") and the assistant lists every matching alarm from RhythmAI's stored alarm data with the exact count, where it used to answer from a sample or say it had no user filter.",
+        "The answer says which stored names your word matched, how many alarms in the period carry no user or host value and so could not match, and how many alarms match over the last 7 and 30 days.",
+        "Change cards say what they did not do: when one message asks for a case and a status change, the case card is offered and the answer says the status change is not included; \"mark these alarms as false positive\" as the next message then builds the status card for the same alarms. When a message asks to change alarm status and no card is built, a line under the answer says nothing was changed in LogRhythm.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "The user filter matches part of a login or account name in any letter case, with a domain prefix or suffix ignored. The host filter matches part of a host name, or a whole IP address exactly; an address written with a port is read without the port, and a network range is not supported.",
+        "A user or host filter combines with a time span, a rule name and alarm numbers. With no time span in the question the last 24 hours are read, and the 7-day and 30-day counts are given so a longer span can be asked for. Up to 100 matching alarms are listed, newest first.",
+        "The record count beside an alarm lookup is now the true number of matching alarms on every lookup, where it used to show the size of the detailed sample.",
+        "A message pasted with quotation marks around it builds the same card as the sentence without them, and a question in quotation marks no longer builds a card.",
+        "After a request that built a case card or a status card for a set of alarms, \"these alarms\" in the next message means the same alarms, and the card says so. Where a change cannot be made from the chat (write tools off, or alarm status on the Threat Universe) the answer says that instead of suggesting another try.",
+        "Upgrading changes no settings; the Chrome extension is unchanged at 1.3.0."
+      ]
+    },
+    {
       "version": "1.23.34",
       "date": "2026-11-11",
       "appOnly": true,
