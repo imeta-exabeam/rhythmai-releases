@@ -1,6 +1,27 @@
 {
   "releases": [
     {
+      "version": "1.23.38",
+      "date": "2026-11-20",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "\"Closed alarms\" means every closed status: with LogRhythm MCP on, asking the chat for closed alarms now reads all six closed statuses (Closed, False Alarm, Resolved, Unresolved, Reported and Monitor), where it used to read plain Closed only and often found none.",
+        "\"Open alarms\" reads New, Opened, Working and Escalated together. A status named in the question (\"closed as false positive\", \"working\", \"monitoring\") reads that one status, so \"how many alarms were closed as false positive?\" counts those alarms and not a sample of the newest alarms.",
+        "The plan line under the answer shows which statuses were read.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "For a group of statuses the app asks LogRhythm once per status and merges the results newest first, listing each alarm once with its own status name. The requested count and offset apply to the merged list, and all the requests share one time limit.",
+        "When a page may continue beyond what was read, the answer says \"at least\" before the count.",
+        "\"List unresolved alarms\" now reads the open alarms. To list the status Closed: Unresolved, ask for alarms closed as unresolved.",
+        "Changing an alarm's status from the chat is unchanged by this release.",
+        "Upgrading changes no settings; the Chrome extension is unchanged at 1.3.0."
+      ]
+    },
+    {
       "version": "1.23.37",
       "date": "2026-11-20",
       "appOnly": true,
