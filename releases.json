@@ -1,6 +1,25 @@
 {
   "releases": [
     {
+      "version": "1.23.36",
+      "date": "2026-11-20",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Security fix: a request that carried no sign-in could make the app's web server return files from inside the app container that are not part of the web interface, including the server's TLS private key, the application and audit logs, and the two configuration files. Such a request now gets a plain 404.",
+        "Install this update as soon as you can. Every earlier version should be treated as affected.",
+        "If the RhythmAI web address can be reached by people you do not fully trust, replace the server's TLS certificate after updating.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "In our tests the sign-in signing key, the encryption key and the database password could not be read this way. The LogRhythm and threat intelligence credentials are stored encrypted in the database and are not in the files that could be read.",
+        "Pages, assets, deep links and the health check behave as before. A request for a file that does not exist inside the web interface still gets the app's start page, as before.",
+        "Upgrading changes no settings; the Chrome extension is unchanged at 1.3.0."
+      ]
+    },
+    {
       "version": "1.23.35",
       "date": "2026-11-14",
       "appOnly": true,
