@@ -1,6 +1,27 @@
 {
   "releases": [
     {
+      "version": "1.23.39",
+      "date": "2026-11-20",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "One card for a case and a status: \"create a case for these alarms and close them as false positive\" now builds a single card. On Confirm it creates the case, attaches the alarms and then sets their status, with one result line per alarm.",
+        "The card shows the status as its own row. Untick it to create the case only, or pick a different status before confirming.",
+        "It works for the alarms listed in the previous answer, for alarm numbers typed in the message and for the alarm on screen, with the case or the status asked for first. \"Attach these alarms to a new case\" and \"set these alarms as false positive and attach to a new case\" are read as well.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "The status is carried only when the whole message is one case request and one status command over the same alarms. Anything else builds the case card alone, and an amber line on the card says it creates the case only and that the status change can be asked for as the next message.",
+        "The status step runs last and only for the alarms still ticked on the card, up to 25 alarms. If the alarm status tool is switched off, the case is still created and the status step is shown as not done.",
+        "\"This alarms\" is read as \"these alarms\" when the message would otherwise build nothing. \"Attach\" or \"add\" builds a new case only with the word \"new\"; \"add them to case 4041\" is not changed by this release.",
+        "On the chat page a bare \"them\" as the only object (\"create a case for them\") still builds no card; name the alarms as \"these alarms\".",
+        "Upgrading changes no settings; the Chrome extension is unchanged at 1.3.0."
+      ]
+    },
+    {
       "version": "1.23.38",
       "date": "2026-11-20",
       "appOnly": true,
