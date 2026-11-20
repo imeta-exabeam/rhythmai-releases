@@ -1,6 +1,26 @@
 {
   "releases": [
     {
+      "version": "1.23.37",
+      "date": "2026-11-20",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Security: the Settings pages no longer send stored secrets to the browser. The LogRhythm connection and threat intelligence settings come back with blank password and key fields and a line saying a value is saved; saving a form with a blank secret field keeps the stored value.",
+        "Security: admin actions need a real permission, where a valid sign-in used to be enough. Changing settings, clearing the alarm tables, building, clearing or cleaning up the graph, and clearing or training the regex library need the Settings permission. Adding or removing regex library entries and the MPE rule actions need the Regex Builder permission. Five regex library actions that needed no sign-in at all now need one.",
+        "A signed-in user without the Settings permission is sent only the SIEM address, the web port and the console link. The detailed health check needs a sign-in.",
+        "App only: one click updates it. After updating, check that the roles of the people who administer RhythmAI hold the Settings permission."
+      ],
+      "highlights": [
+        "Before this release any signed-in user could read the stored LogRhythm password, the LogRhythm API key and the AbuseIPDB key from the two settings requests, whatever their role.",
+        "On the Settings page a secret you type is kept while a save is running, the saved lines come from the server's answer, and a LogRhythm form that failed to load can no longer be saved over the stored values. A secret made only of spaces is treated as blank, and a secret the store refused is never shown as saved.",
+        "The audit record written when the alarm tables are cleared now states which stores were cleared.",
+        "Upgrading changes no settings and no stored secrets; the Chrome extension is unchanged at 1.3.0."
+      ]
+    },
+    {
       "version": "1.23.36",
       "date": "2026-11-20",
       "appOnly": true,
