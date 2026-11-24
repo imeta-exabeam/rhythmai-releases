@@ -1,6 +1,28 @@
 {
   "releases": [
     {
+      "version": "1.23.40",
+      "date": "2026-11-24",
+      "appOnly": true,
+      "servicesChanged": [
+        "app"
+      ],
+      "summary": [
+        "Investigation API: SOAR platforms and scripts can ask RhythmAI to investigate a LogRhythm alarm over REST and read the same report the side panel shows, as JSON (POST /api/v1/alarms/{id}/investigations, then GET /api/v1/investigations/{id}).",
+        "API keys: Settings > Users > API keys creates long-lived keys for integrations. A key acts as the user you choose, works only on /api/v1, is shown once, stored as a hash, and can be revoked.",
+        "Investigations monitor: Settings > Health Check > Investigations shows every alarm investigation, from the side panel, the chat, the API or the AI SOC worker: what is queued, what is running and at which stage, and how each finished, with duration, time to first token and tokens per second.",
+        "App only: one click updates it."
+      ],
+      "highlights": [
+        "The API runs one investigation at a time and accepts up to 25 queued or running; beyond that it answers 429 with Retry-After. A second request for an alarm already being investigated returns the same investigation.",
+        "An alarm newer than the last alarm sync is waited for for up to 3 minutes; if it still is not stored, the investigation ends as failed with a message saying so.",
+        "Use the same address and port as the web interface. With RhythmAI's default self-signed certificate, turn certificate verification off in the calling tool when connecting by IP address.",
+        "The monitor flags a working run with no activity for 3 minutes as stuck; queued and waiting runs are never flagged. Runs are kept for 30 days.",
+        "The User Guide RAI-UG-API-001 describes the API, keys, a SOAR playbook and troubleshooting.",
+        "Upgrading changes no settings; the Chrome extension is unchanged at 1.3.0."
+      ]
+    },
+    {
       "version": "1.23.39",
       "date": "2026-11-20",
       "appOnly": true,
